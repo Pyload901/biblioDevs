@@ -1,0 +1,12 @@
+<div>
+    <?php if(!empty($errors)):?>
+        <?php foreach($errors as $error): ?>
+            <p><?=$error?></p><br>
+        <?php endforeach;?>
+    <?php endif;?>
+    <form action="" method="post">
+        <input type="text" name="email" id="email">
+        <input type="password" name="password" id="password">
+        <input type="submit" value="Iniciar Sesión">
+    </form>
+</div>

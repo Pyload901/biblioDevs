@@ -1,0 +1,13 @@
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+    ErrorDocument 404 http://localhost/error
+
+    RewriteCond %{SCRIPT_FILENAME} !-d
+    RewriteCond %{SCRIPT_FILENAME} !-f
+    RewriteRule ^(.*)/(.*)$ index.php?controller=$1&method=$2 
+    RewriteCond %{SCRIPT_FILENAME} !-d
+    RewriteCond %{SCRIPT_FILENAME} !-f
+    RewriteRule ^(.*)$ index.php?controller=$1&method=index
+
+    RewriteRule ^$ index.php?controller=home&method=index
+</IfModule>

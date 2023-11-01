@@ -1,0 +1,26 @@
+<div>
+    <?php if(!empty($errors)):?>
+        <?php foreach($errors as $error): ?>
+            <p><?=$error?></p><br>
+        <?php endforeach;?>
+    <?php endif;?>
+    <form action="" method="post">
+        <label for="nombre">Nombre:</label>
+        <input type="text" name="nombre" id="nombre">
+        <label for="email">Email:</label>
+        <input type="text" name="email" id="email">
+        <label for="password">Contraseña:</label>
+        <input type="password" name="password" id="password">
+        <label for="ocupacion">Ocupación:</label>
+        <input type="text" name="ocupacion" id="ocupacion">
+        <label for="birthday">Año de nacimiento:</label>
+        <input type="number" name="birthday" id="birthday">
+        <label for="pais">Pais:</label>
+        <select name="pais" id="pais">
+            <option value="">Seleccione un país</option>
+            <option value="1">El Salvador</option>
+            <option value="2">México</option>
+        </select>
+        <input type="submit" value="Registrarse">
+    </form>
+</div>
