@@ -7,7 +7,7 @@ class UserModel {
     private string $birthday;
     private int $id_pais;
     private string $ocupacion;
-    private string $rol;
+    private string $role;
     private $DB;
     public function __construct() {
         $this->DB = Database::Connect();
@@ -23,7 +23,7 @@ class UserModel {
     // }
     public function Save() : bool {
         try {
-            $stmt = $this->DB->prepare("INSERT INTO Usuario(nombre, email, password, birthday, id_pais, ocupacion, rol) VALUES(?,?,?,?,?,?,'USER')");
+            $stmt = $this->DB->prepare("INSERT INTO Usuario(nombre, email, password, birthday, id_pais, ocupacion, role) VALUES(?,?,?,?,?,?,'USER')");
             $stmt->bindParam(1, $this->nombre, PDO::PARAM_STR);
             $stmt->bindParam(2, $this->email, PDO::PARAM_STR);
             $stmt->bindParam(3, $this->password, PDO::PARAM_STR);
@@ -41,7 +41,7 @@ class UserModel {
 
     public function Get(): UserModel | null {
         try {
-            $stmt = $this->DB->prepare("SELECT id, email, password FROM Usuario WHERE email = ?");
+            $stmt = $this->DB->prepare("SELECT id, email, password, role FROM Usuario WHERE email = ?");
             $stmt->bindParam(1, $this->email, PDO::PARAM_STR);
             if ($stmt->execute()) {
                 $stmt->setFetchMode(PDO::FETCH_CLASS, UserModel::class);
@@ -53,6 +53,23 @@ class UserModel {
             }
             return null;
         } catch(PDOException $e) {
+            return null;
+        }
+    }
+
+    public function GetAll(): array | null {
+        try {
+            $stmt = $this->DB->prepare("SELECT id, nombre, email FROM Usuario");
+            $stmt->execute();
+            $stmt->setFetchMode(PDO::FETCH_CLASS, UserModel::class);
+            $rows = $stmt->fetchAll();
+            if ($rows)
+                return $rows;
+            return null;
+        } catch(PDOException $e) {
+            if ($_ENV["DEV"]) {
+                echo $e->getMessage();
+            }
             return null;
         }
     }
@@ -228,25 +245,25 @@ class UserModel {
     }
 
      /**
-     * Get the value of rol
+     * Get the value of role
      *
      * @return string
      */
-    public function getRol(): string
+    public function getRole(): string
     {
-        return $this->rol;
+        return $this->role;
     }
 
     /**
-     * Set the value of rol
+     * Set the value of role
      *
-     * @param string $rol
+     * @param string $role
      *
      * @return self
      */
-    public function setRol(string $rol): self
+    public function setRole(string $role): self
     {
-        $this->rol = $rol;
+        $this->role = $role;
 
         return $this;
     }

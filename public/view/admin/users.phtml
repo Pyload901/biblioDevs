@@ -1,0 +1,12 @@
+<div>
+    <?php if(isset($users)): ?>
+        <?php foreach($users as $user): ?>
+        <div class="card">
+            <a href="/admin/user&id=<?=$user->getId();?>">
+                <p><?=$user->getEmail()?></p>
+                <h4><?=$user->getNombre()?></h4>
+            </a>
+        </div>
+        <?php endforeach; ?>
+    <?php endif; ?>
+</div>

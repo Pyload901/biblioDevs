@@ -20,9 +20,9 @@ class UserController {
             
             if (isset($db_user)) {
                 if (password_verify($user->getPassword(), $db_user->getPassword())) {
-                    var_dump("hola");
                     $_SESSION["user_id"] = $db_user->getId();
                     $_SESSION["user_email"] = $db_user->getEmail();
+                    $_SESSION["user_role"] = $db_user->getRole();
                     header("Location: /");
                 } else {
                     $errors = array_merge($errors, array("No se ha podido iniciar sesión, Usuario inválido"));

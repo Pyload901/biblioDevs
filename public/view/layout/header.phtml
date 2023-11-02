@@ -11,9 +11,11 @@
             <img src=<?="{$HOST}assets/images/logo.png"?> alt="logo">
         </figure>
         <nav>
-            <a href="">Administrador</a>
-            <?php if (isset($_SESSION) 
-                && !empty($_SESSION["user_id"])): ?>
+            <?php if (Utils::isAdmin()): ?>
+                <a href="/admin">Administrador</a>
+            <?php endif; ?>
+
+            <?php if (Utils::isLogged()): ?>
                 <a href="/user">Cuenta</a>
                 <a href="/user/logout">Cerrar sesión</a>
             <?php else: ?>
