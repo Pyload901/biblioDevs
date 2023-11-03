@@ -1,0 +1,14 @@
+<div>
+    <?php if (isset($libro)): ?>
+        <p>ISBN: <?=$libro->getIsbn()?></p>
+        <p>Titulo: <?=$libro->getTitulo()?></p>
+        <p>Autor: <?=$libro->getAutor()?></p>
+        <p>Descripcion: <?= is_null($libro->getDescripcion()) ? "N/A" : $libro->getDescripcion() ?></p>
+        <p>Año: <?= !$libro->getYear() ? "N/A" : $libro->getYear() ?></p>
+        <p>Edicion: <?= !$libro->getEdicion() ? "N/A" : $libro->getEdicion() ?></p>
+        <p>Leido: <?= $libro->getLeido() ? "Si" : "No" ?></p>
+
+        <a href="/home/editar&id=<?=$libro->getId()?>">Editar</a>
+        <a href="/home/eliminar&id=<?=$libro->getId()?>">Eliminar</a>
+    <?php endif; ?>
+</div>

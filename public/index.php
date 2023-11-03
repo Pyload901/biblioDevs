@@ -15,7 +15,7 @@ ini_set( "display_errors", 1 );
 require_once "./autoload.php";
 require_once "../config/config.php";
 require_once "../config/Database.php";
-require_once "./utils.php";
+require_once "./Utils.php";
 
 $HOST = (isset($_ENV["APP_HOST"]) ? $_ENV["APP_HOST"] :"http://localhost/");
 $controller_name = "HomeController";
