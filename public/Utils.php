@@ -18,4 +18,9 @@ class Utils {
             && !empty($_SESSION["user_id"])
         );
     }
+    public static function isDevMode(): bool {
+        return (
+            isset($_ENV["DEV"])
+        );
+    }
 }

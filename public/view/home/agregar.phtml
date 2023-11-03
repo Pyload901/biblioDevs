@@ -1,0 +1,35 @@
+<?php
+    $isbn = isset($libro) ? $libro->getIsbn() : "";
+    $titulo = isset($libro) ? $libro->getTitulo() : "";
+    $autor = isset($libro) ? $libro->getAutor() : "";
+    $descripcion = isset($libro) && !is_null($libro->getDescripcion()) ? $libro->getDescripcion() : "";
+    $year = isset($libro) && $libro->getYear() ? $libro->getYear() : "";
+    $edicion = isset($libro) && $libro->getEdicion() ? $libro->getEdicion() : "";
+    $leido = isset($libro) && $libro->getLeido() ? "checked" : "";
+?>
+<div>
+    <form method="POST">
+        <label for="isbn">ISBN:</label>
+        <input type="text" name="isbn" id="isbn" value="<?=$isbn?>">
+
+        <label for="titulo">Titulo:</label>
+        <input type="text" name="titulo" id="titulo" value="<?=$titulo?>">
+        
+        <label for="autor">Autor:</label>
+        <input type="text" name="autor" id="autor" value="<?=$autor?>">
+        
+        <label for="descripcion">Descripción:</label>
+        <textarea name="descripcion" id="descripcion" cols="30" rows="10"><?=$descripcion?></textarea>
+        
+        <label for="year">Año:</label>
+        <input type="number" name="year" id="year" value="<?=$year?>">
+        
+        <label for="edicion">Edición:</label>
+        <input type="number" name="edicion" id="edicion" value="<?=$edicion?>">
+        
+        <label for="leido">Leído:</label>
+        <input type="checkbox" name="leido" id="leido" <?=$leido?>>
+        
+        <input type="submit" value="<?=isset($libro) ? 'Editar' : 'Agregar'?>">
+    </form>
+</div>

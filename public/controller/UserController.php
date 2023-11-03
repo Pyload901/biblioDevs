@@ -54,7 +54,7 @@ class UserController {
             $ocupacion = strip_tags($_POST["ocupacion"]);
             $birthday = strip_tags($_POST["birthday"]);
             $pais = strip_tags($_POST["pais"]);
-            
+
             // encrypt password
             $hash = password_hash($password, PASSWORD_BCRYPT);
             $user = new UserModel();
