@@ -38,9 +38,13 @@ class LibroModel {
             return false;
         }
     }
-    public function Update(int $id_usuario): bool {
+    public function Update(int $id_usuario, bool $isAdmin = false): bool {
         try {
-            $stmt = $this->DB->prepare("UPDATE Libro SET isbn=?, titulo=?, autor=?, descripcion=?, year=?, edicion=?, leido=? WHERE id = ? AND id_usuario = ?");
+            $query = "UPDATE Libro SET isbn=?, titulo=?, autor=?, descripcion=?, year=?, edicion=?, leido=? WHERE id = ?";
+            if (!$isAdmin) {
+                $query .= " AND id_usuario = ?";
+            }
+            $stmt = $this->DB->prepare($query);
             $stmt->bindParam(1, $this->isbn, PDO::PARAM_STR);
             $stmt->bindParam(2, $this->titulo, PDO::PARAM_STR);
             $stmt->bindParam(3, $this->autor, PDO::PARAM_STR);
@@ -49,7 +53,9 @@ class LibroModel {
             $stmt->bindParam(6, $this->edicion, PDO::PARAM_STR);
             $stmt->bindParam(7, $this->leido, PDO::PARAM_BOOL);
             $stmt->bindParam(8, $this->id, PDO::PARAM_INT);
-            $stmt->bindParam(9, $id_usuario, PDO::PARAM_INT);
+            if (!$isAdmin) {
+                $stmt->bindParam(9, $id_usuario, PDO::PARAM_INT);
+            }
             $res = $stmt->execute();
             if ($res) {
                 return true;
@@ -62,11 +68,17 @@ class LibroModel {
             return false;
         }
     }
-    public function Delete(int $id_usuario): bool {
+    public function Delete(int $id_usuario, bool $isAdmin = false): bool {
         try {
-            $stmt = $this->DB->prepare("DELETE FROM Libro WHERE id = ? AND id_usuario = ?");
+            $query = "DELETE FROM Libro WHERE id = ?";
+            if (!$isAdmin) {
+                $query .= " AND id_usuario = ?";
+            }
+            $stmt = $this->DB->prepare($query);
             $stmt->bindParam(1, $this->id, PDO::PARAM_INT);
-            $stmt->bindParam(2, $id_usuario, PDO::PARAM_INT);
+            if (!$isAdmin) {
+                $stmt->bindParam(2, $id_usuario, PDO::PARAM_INT);
+            }
             $res = $stmt->execute();
             if ($res) {
                 return true;
@@ -79,15 +91,23 @@ class LibroModel {
             return false;
         }
     }
-    public function Get(int $id_usuario): LibroModel | null {
+    public function Get(int $id_usuario, bool $isAdmin = false): LibroModel | null {
         try {
-            $stmt = $this->DB->prepare("SELECT * FROM Libro WHERE id = ? AND id_usuario = ?");
+            $query = "SELECT * FROM Libro WHERE id = ?";
+            if (!$isAdmin) {
+                $query .= " AND id_usuario = ?";
+            }
+            $stmt = $this->DB->prepare($query);
             $stmt->bindParam(1, $this->id, PDO::PARAM_INT);
-            $stmt->bindParam(2, $id_usuario, PDO::PARAM_INT);
+
+            if (!$isAdmin) {
+                $stmt->bindParam(2, $id_usuario, PDO::PARAM_INT);
+            }
+
             $stmt->execute();
-            if ($stmt->rowCount()) {
-                $stmt->setFetchMode(PDO::FETCH_CLASS, LibroModel::class);
-                $res = $stmt->fetch();
+            $stmt->setFetchMode(PDO::FETCH_CLASS, LibroModel::class);
+            $res = $stmt->fetch();
+            if ($res) {
                 if ($res)
                     return $res;
                 return null;
