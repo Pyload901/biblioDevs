@@ -1,6 +1,22 @@
 <?php
 class UserController {
     public static function Index() {
+        require_once "./model/UserModel.php";
+        $errors = array();
+    
+        if (isset($_SESSION["user_id"])) {
+            $user_id = $_SESSION["user_id"];
+            $user = new UserModel();
+            $db_user = $user->GetById($user_id);
+    
+            if ($db_user) {
+            } else {
+                $errors = array_merge($errors, array("Usuario no encontrado"));
+            }
+        } else {
+            $errors = array_merge($errors, array("Usuario no autenticado"));
+        }
+    
         require_once "./view/user/account.phtml";
     }
     public static function Login() {
@@ -81,4 +97,105 @@ class UserController {
         session_destroy();
         header("Location: /");
     }
+
+        
+    public static function ShowUser() {
+        require_once "./model/UserModel.php";
+        $errors = array();
+    
+        if (isset($_SESSION["user_id"])) {
+            $user_id = $_SESSION["user_id"];
+            $user = new UserModel();
+            $db_user = $user->GetById($user_id);
+    
+            if ($db_user) {
+            } else {
+                $errors = array_merge($errors, array("Usuario no encontrado"));
+            }
+        } else {
+            $errors = array_merge($errors, array("Usuario no autenticado"));
+        }
+    
+        require_once "./view/user/account_change.phtml";
+    }
+    
+    public static function UpdateUser() {
+        require_once "./model/UserModel.php";
+        $errors = array();
+    
+        if (isset($_SESSION["user_id"])) {
+            $user_id = $_SESSION["user_id"];
+            $user = new UserModel();
+            $user->setId($user_id);
+    
+            if (!empty($_POST)) {
+                // Actualizar los campos con los nuevos valores del formulario
+                $user->setNombre(strip_tags($_POST["nombre"]))
+                    ->setOcupacion(strip_tags($_POST["ocupacion"]))
+                    ->setBirthday(strip_tags($_POST["birthday"]))
+                    ->setIdPais(strip_tags($_POST["pais"]));
+    
+             
+                if ($user->Update()) {
+                    header("Location: /user"); 
+                } else {
+                    $errors = array_merge($errors, array("Ha ocurrido un error al guardar los cambios."));
+                }
+            }
+            $db_user = $user->GetById($user_id);
+    
+            if ($db_user) {
+            } else {
+                $errors = array_merge($errors, array("Usuario no encontrado"));
+            }
+            require_once "./view/user/account_change.phtml";
+        } else {
+            $errors = array_merge($errors, array("Usuario no autenticado"));
+        }
+    }     
+    
+    public static function ChangePassword() {
+        // Código para mostrar la vista change_password.phtml
+        require_once "./view/user/password.phtml";
+    }
+    
+    public static function UpdatePassword() {
+        require_once "./model/UserModel.php";
+        $errors = array();
+    
+        if (isset($_SESSION["user_id"])) {
+            $user_id = $_SESSION["user_id"];
+            $user = new UserModel();
+            $user->setId($user_id);
+    
+            if (!empty($_POST)) {
+                $currentPassword = strip_tags($_POST["current_password"]);
+                $newPassword = strip_tags($_POST["new_password"]);
+                $confirmPassword = strip_tags($_POST["confirm_password"]);
+    
+                // Verificar que la contraseña actual sea correcta
+                $db_user = $user->GetById($user_id);
+                if ($db_user && password_verify($currentPassword, $db_user->getPassword())) {
+                    if ($newPassword === $confirmPassword) {
+                        // Actualizar la contraseña
+                        $user->UpdatePassword($newPassword);
+                        header("Location: /user"); // Redirige al usuario a su perfil o a donde desees
+                    } else {
+                        $errors = array_merge($errors, array("Las contraseñas no coinciden"));
+                    }
+                } else {
+                    $errors = array_merge($errors, array("Contraseña actual incorrecta"));
+                }
+            }
+    
+            // Cargar la vista nuevamente con los errores
+            echo "hola";
+            require_once "./view/user/password.phtml";
+        } else {
+            $errors = array_merge($errors, array("Usuario no autenticado"));
+        }
+    }
+    
+    
+   
 }

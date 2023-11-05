@@ -1,0 +1,15 @@
+<form action="/user/updateUser" method="post">
+    <label for="nombre">Nombre:</label>
+    <input type="text" name="nombre" id="nombre" value="<?= htmlspecialchars($db_user->getNombre()) ?>" >
+    <label for="ocupacion">Ocupación:</label>
+    <input type="text" name="ocupacion" id="ocupacion" value="<?= htmlspecialchars($db_user->getOcupacion()) ?>" >
+    <label for="birthday">Año de nacimiento:</label>
+    <input type="number" name="birthday" id="birthday" value="<?= htmlspecialchars($db_user->getBirthday()) ?>" >
+    <label for="pais">País:</label>
+    <select name="pais" id="pais" >
+        <option value="">Seleccione un país</option>
+        <option value="1" <?php if ($db_user->getIdPais() === 1) echo "selected" ?>>El Salvador</option>
+        <option value="2" <?php if ($db_user->getIdPais() === 2) echo "selected" ?>>México</option>
+    </select>
+    <input type="submit" value="Guardar cambios">
+</form>
