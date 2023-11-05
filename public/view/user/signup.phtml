@@ -1,26 +1,44 @@
-<div>
+<div class="w-full flex flex-col items-center">
+    <h3 class="text-lg text-center font-bold">Registro</h3>
     <?php if(!empty($errors)):?>
         <?php foreach($errors as $error): ?>
             <p><?=$error?></p><br>
         <?php endforeach;?>
     <?php endif;?>
-    <form action="" method="post">
-        <label for="nombre">Nombre:</label>
-        <input type="text" name="nombre" id="nombre">
-        <label for="email">Email:</label>
-        <input type="text" name="email" id="email">
-        <label for="password">Contraseña:</label>
-        <input type="password" name="password" id="password">
-        <label for="ocupacion">Ocupación:</label>
-        <input type="text" name="ocupacion" id="ocupacion">
-        <label for="birthday">Año de nacimiento:</label>
-        <input type="number" name="birthday" id="birthday">
-        <label for="pais">Pais:</label>
-        <select name="pais" id="pais">
-            <option value="">Seleccione un país</option>
-            <option value="1">El Salvador</option>
-            <option value="2">México</option>
-        </select>
-        <input type="submit" value="Registrarse">
+    <form action="" method="post" class="w-full flex flex-col max-w-xs">
+        <div class="my-2">
+            <label class="block" for="nombre">Nombre:</label>
+            <input class="border bg-neutral-50 appearance-none rounded w-full py-1 px-2 focus:bg-white transition duration-300 outline-none focus:border-gray-500" type="text" name="nombre" id="nombre">
+        </div>
+        <div class="my-2">
+            <label class="block" for="email">Email:</label>
+            <input class="border bg-neutral-50 appearance-none rounded w-full py-1 px-2 focus:bg-white transition duration-300 outline-none focus:border-gray-500" type="email" name="email" id="email">
+        </div>
+        <div class="my-2">
+            <label class="block" for="password">Contraseña:</label>
+            <input class="border bg-neutral-50 appearance-none rounded w-full py-1 px-2 focus:bg-white transition duration-300 outline-none focus:border-gray-500" type="password" name="password" id="password">
+        </div>
+        <div class="my-2">
+            <label class="block" for="ocupacion">Ocupación:</label>
+            <input class="border bg-neutral-50 appearance-none rounded w-full py-1 px-2 focus:bg-white transition duration-300 outline-none focus:border-gray-500" type="text" name="ocupacion" id="ocupacion">
+        </div>
+        <div class="my-2">
+            <label class="block" for="birthday">Año de nacimiento:</label>
+            <input class="border bg-neutral-50 appearance-none rounded w-full py-1 px-2 focus:bg-white transition duration-300 outline-none focus:border-gray-500" type="number" name="birthday" id="birthday">
+        </div>
+        <div class="my-2">
+            <label class="block" for="pais">Pais:</label>
+            <select name="pais" id="pais" class="border rounded py-1 px-2 w-full outline-none focus:border-gray-500">
+                <option value="">-- Seleccione un país --</option>
+                <?php if (isset($paises)): ?>
+                    <?php foreach($paises as $pais):?>
+                        <option value="<?=$pais->getId()?>">
+                            <?=$pais->getNombre()?>
+                        </option>
+                    <?php endforeach;?>
+                <?php endif; ?>
+            </select>
+        </div>
+        <input type="submit" value="Registrarse" class="self-end border rounded bg-red outline-none py-1 px-2 my-2">
     </form>
 </div>

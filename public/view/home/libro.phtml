@@ -1,14 +1,23 @@
-<div>
+<div class="flex flex-col w-full justify-center items-center">
     <?php if (isset($libro)): ?>
-        <p>ISBN: <?=$libro->getIsbn()?></p>
-        <p>Titulo: <?=$libro->getTitulo()?></p>
-        <p>Autor: <?=$libro->getAutor()?></p>
-        <p>Descripcion: <?= is_null($libro->getDescripcion()) ? "N/A" : $libro->getDescripcion() ?></p>
-        <p>Año: <?= !$libro->getYear() ? "N/A" : $libro->getYear() ?></p>
-        <p>Edicion: <?= !$libro->getEdicion() ? "N/A" : $libro->getEdicion() ?></p>
-        <p>Leido: <?= $libro->getLeido() ? "Si" : "No" ?></p>
-
-        <a href="/home/editar&id=<?=$libro->getId()?>">Editar</a>
-        <a href="/home/eliminar&id=<?=$libro->getId()?>">Eliminar</a>
+        <h3 class="text-lg text-center font-bold">Información del libro</h3>
+        <div class="mx-12">
+            <a class="inline-block border rounded px-4 py-1 m-2 w-32 text-center bg-red-500 text-white" href="/home/editar&id=<?=$libro->getId()?>">Editar</a>
+            <a onclick="onDeleteConfirm(event)" id="eliminar" class="inline-block border rounded px-4 py-1 m-2 w-32 text-center hover:bg-neutral-900 hover:text-white transition duration-300" href="/home/eliminar&id=<?=$libro->getId()?>">Eliminar</a>
+        </div>
+        <div class="flex flex-row flex-wrap justify-center">
+            <div class="border w-96 max-w-xs py-10 px-4">
+                <p><b>ISBN:</b> <?=$libro->getIsbn()?></p>
+                <p><b>Titulo:</b> <?=$libro->getTitulo()?></p>
+                <p><b>Autor:</b> <?=$libro->getAutor()?></p>
+                <p><b>Año:</b> <?=!$libro->getYear() ? "N/A" : $libro->getYear() ?></p>
+                <p><b>Edición:</b> <?=!$libro->getEdicion() ? "N/A" : $libro->getEdicion() ?></p>
+                <p><b>Leído:</b> <?=$libro->getLeido() ? "Si" : "No" ?></p>
+            </div>
+            <div class="border w-96 max-w-xs py-10 px-4">
+                <p><b>Descripción:</b></p>
+                <p><?= is_null($libro->getDescripcion()) ? "N/A" : $libro->getDescripcion() ?></p>
+            </div>
+        </div>
     <?php endif; ?>
 </div>

@@ -57,7 +57,7 @@ class HomeController {
             $id_usuario = $_SESSION["user_id"];
             $libro = new LibroModel();
             $libro->setId($_GET["id"]);
-            $libro = $libro->Get($id_usuario);
+            $libro = $libro->Get($id_usuario, Utils::isAdmin());
             require_once "./view/home/libro.phtml";
         } else {
             header("Location: /");
@@ -93,8 +93,8 @@ class HomeController {
                     ->setEdicion($edicion)
                     ->setLeido($leido)
                     ->setId(strip_tags($_GET["id"]));
-                if ($libro->Update($id_usuario)) {
-                    header("Location: /");
+                if ($libro->Update($id_usuario, Utils::isAdmin())) {
+                    header("Location: /home/libro&id={$libro->getId()}");
                 } else {
                     echo "Error";
                 }
@@ -102,7 +102,7 @@ class HomeController {
                 $id_usuario = $_SESSION["user_id"];
                 $libro = new LibroModel();
                 $libro->setId(strip_tags($_GET["id"]));
-                $libro = $libro->Get($id_usuario);
+                $libro = $libro->Get($id_usuario, Utils::isAdmin());
                 require_once "./view/home/agregar.phtml";
             }
         } else {
@@ -117,13 +117,20 @@ class HomeController {
             $id_usuario = $_SESSION["user_id"];
             $libro = new LibroModel();
             $libro->setId(strip_tags($_GET["id"]));
-            if($libro->Delete($id_usuario)) {
-                header("Location: /");
+            if($libro->Delete($id_usuario, Utils::isAdmin())) {
+                if (Utils::isAdmin()) {
+                    if (isset($_SESSION["editing_user"]))
+                        header("Location: /admin/user&id={$_SESSION['editing_user']}");
+                    else
+                        header("Location: /admin");
+                } else {
+                    header("Location: /");
+                }
             } else {
                 echo "Error";
             }
         } else {
-            header("Location: ..");
+            header("Location: /");
         }
     }
 };

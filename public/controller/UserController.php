@@ -89,7 +89,11 @@ class UserController {
         } else {
             $errors = array_merge($errors, array("No se han completado los campos"));
         }
+        require_once "./model/PaisModel.php";
 
+        $pais = new PaisModel();
+        $paises = $pais->GetAll();
+        
         require_once "./view/user/signup.phtml";
     }
     public static function Logout() {
