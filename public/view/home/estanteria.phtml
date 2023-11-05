@@ -1,17 +1,17 @@
-<div>
+<div class="w-full">
     <?php if (empty($_GET["id"])): ?>
-        <div>
-            <a href="/home/agregar">Agregar</a>
+        <div class="w-full my-2">
+            <a href="/home/agregar" class="inline-block border px-4 py-1 bg-red-500 text-white rounded">Agregar</a>
         </div>
     <?php endif; ?>
     <?php if (isset($libros)): ?>
-        <?php foreach ($libros as $libro): ?>
-            <a href="/home/libro&id=<?=$libro->getId()?>">
-                <div class="libro">
-                    <p><?=$libro->getTitulo()?></p>
-                    <p><?=$libro->getAutor()?>, <?=$libro->getYear()?></p>
-                </div>
-            </a>
-        <?php endforeach; ?>
+        <div class="grid grid-cols-6 gap-2">
+            <?php foreach ($libros as $libro): ?>
+                <a href="/home/libro&id=<?=$libro->getId()?>" class="border box-border p-2 flex flex-col rounded hover:bg-gray-100 text-center">
+                    <p class="inline-block"><?=$libro->getTitulo()?></p>
+                    <p class="inline-block"><?=$libro->getAutor()?>, <?=$libro->getYear() ? $libro->getYear() : "s.f." ?></p>
+                </a>
+            <?php endforeach; ?>
+        </div>
     <?php endif; ?>
 </div>

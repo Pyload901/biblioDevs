@@ -7,29 +7,41 @@
     $edicion = isset($libro) && $libro->getEdicion() ? $libro->getEdicion() : "";
     $leido = isset($libro) && $libro->getLeido() ? "checked" : "";
 ?>
-<div>
-    <form method="POST">
-        <label for="isbn">ISBN:</label>
-        <input type="text" name="isbn" id="isbn" value="<?=$isbn?>">
+<div class="w-full flex flex-col items-center">
+    <h3 class="text-lg text-center font-bold">Agregar un libro</h3>
 
-        <label for="titulo">Titulo:</label>
-        <input type="text" name="titulo" id="titulo" value="<?=$titulo?>">
-        
-        <label for="autor">Autor:</label>
-        <input type="text" name="autor" id="autor" value="<?=$autor?>">
-        
-        <label for="descripcion">Descripción:</label>
-        <textarea name="descripcion" id="descripcion" cols="30" rows="10"><?=$descripcion?></textarea>
-        
-        <label for="year">Año:</label>
-        <input type="number" name="year" id="year" value="<?=$year?>">
-        
-        <label for="edicion">Edición:</label>
-        <input type="number" name="edicion" id="edicion" value="<?=$edicion?>">
-        
-        <label for="leido">Leído:</label>
-        <input type="checkbox" name="leido" id="leido" <?=$leido?>>
-        
-        <input type="submit" value="<?=isset($libro) ? 'Editar' : 'Agregar'?>">
+    <form method="POST" class="flex flex-col w-96 w-max-lg">
+        <div class="my-2">
+            <label for="isbn" class="block">ISBN:</label>
+            <input class="border bg-neutral-50 appearance-none rounded w-full py-1 px-2 focus:bg-white focus:border-gray-500 transition duration-300 outline-none" type="text" name="isbn" id="isbn" value="<?=$isbn?>">
+        </div>
+        <div class="my-2">
+            <label for="titulo" class="block">Titulo:</label>
+            <input class="border bg-neutral-50 appearance-none rounded w-full py-1 px-2 focus:bg-white focus:border-gray-500 transition duration-300 outline-none" type="text" name="titulo" id="titulo" value="<?=$titulo?>">
+        </div>
+        <div class="my-2">
+            <label for="autor" class="block">Autor:</label>
+            <input class="border bg-neutral-50 appearance-none rounded w-full py-1 px-2 focus:bg-white focus:border-gray-500 transition duration-300 outline-none" type="text" name="autor" id="autor" value="<?=$autor?>">
+        </div>
+        <div class="my-2">
+            <label for="descripcion" class="block">Descripción:</label>
+            <textarea class="border bg-neutral-50 appearance-none rounded w-full py-1 px-2 focus:bg-white focus:border-gray-500 transition duration-300 outline-none" name="descripcion" id="descripcion" cols="30" rows="5"><?=$descripcion?></textarea>
+        </div>
+
+        <div class="flex flex-row my-2">
+            <div class="mr-1">
+                <label for="year">Año:</label>
+                <input class="border bg-neutral-50 appearance-none rounded w-full py-1 px-2 focus:bg-white focus:border-gray-500 transition duration-300 outline-none" type="number" name="year" id="year" value="<?=$year?>">
+            </div>
+            <div class="ml-1">
+                <label for="edicion">Edición:</label>
+                <input class="border bg-neutral-50 appearance-none rounded w-full py-1 px-2 focus:bg-white focus:border-gray-500 transition duration-300 outline-none" type="number" name="edicion" id="edicion" value="<?=$edicion?>">
+            </div>
+        </div>
+        <div class="flex flex-row items-center my-2">
+            <input class="border-gray-100 w-4 h-4 bg-neutral-50 rounded text-red-500 focus:border-gray-500" type="checkbox" name="leido" id="leido" <?=$leido?>>
+            <label class="ml-2" for="leido" class="block">Leído</label>
+        </div>
+        <input class="self-end border rounded bg-red outline-none py-1 px-2 my-2 bg-red-500 text-white" type="submit" value="<?=isset($libro) ? 'Editar' : 'Agregar'?>">
     </form>
 </div>
