@@ -56,7 +56,53 @@ class UserModel {
             return null;
         }
     }
-
+    public function GetById(int $id): UserModel | null {
+        try {
+            $stmt = $this->DB->prepare("SELECT id, nombre, email, password, birthday, id_pais, ocupacion, role FROM Usuario WHERE id = ?");
+            $stmt->bindParam(1, $id, PDO::PARAM_INT);
+            if ($stmt->execute()) {
+                $stmt->setFetchMode(PDO::FETCH_CLASS, UserModel::class);
+                $user = $stmt->fetch();
+                return $user;
+            }
+            return null;
+        } catch (PDOException $e) {
+            return null;
+        }
+    }
+    public function Update(): bool {
+        try {
+            $stmt = $this->DB->prepare("UPDATE Usuario SET nombre = ?, ocupacion = ?, birthday = ?, id_pais = ? WHERE id = ?");
+            $stmt->bindParam(1, $this->nombre, PDO::PARAM_STR);
+            $stmt->bindParam(2, $this->ocupacion, PDO::PARAM_STR);
+            $stmt->bindParam(3, $this->birthday, PDO::PARAM_STR);
+            $stmt->bindParam(4, $this->id_pais, PDO::PARAM_INT);
+            $stmt->bindParam(5, $this->id, PDO::PARAM_INT);
+    
+            $stmt->execute();
+            return true;
+        } catch (PDOException $e) {
+            echo $e->getMessage();
+            return false;
+        }
+    }
+    
+    public function UpdatePassword(string $newPassword): bool {
+        try {
+            // Hashea la nueva contraseña antes de actualizarla en la base de datos
+            $hashedPassword = password_hash($newPassword, PASSWORD_BCRYPT);
+    
+            $stmt = $this->DB->prepare("UPDATE Usuario SET password = ? WHERE id = ?");
+            $stmt->bindParam(1, $hashedPassword, PDO::PARAM_STR);
+            $stmt->bindParam(2, $this->id, PDO::PARAM_INT);
+    
+            $stmt->execute();
+            return true;
+        } catch (PDOException $e) {
+            echo $e->getMessage();
+            return false;
+        }
+    }
     public function GetAll(): array | null {
         try {
             $stmt = $this->DB->prepare("SELECT id, nombre, email FROM Usuario");
