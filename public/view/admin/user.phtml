@@ -1,3 +1,18 @@
-<div>
-    <h3>Aqui se debe poder editar el usuario pero solamente por administradores</h3>
+<div class="max-w-xs my-2">
+    <h3 class="font-bold">Configuración del usuario</h3>
+    <form action="" method="post">
+        <div class="my-2">
+            <label for="role" class="block">Rol:</label>
+            <select name="role" id="role" class="border bg-neutral-50 appearance-none rounded w-full py-1 px-2 focus:bg-white transition duration-300 outline-none focus:border-gray-500">
+                <?php foreach(Role::cases() as $rol): ?>
+                    <?php if ($rol != Role::SUPER) : ?>
+                    <option value="<?=$rol->value?>" <?=(isset($role) && $role==$rol->value) ? "selected":""?>>
+                        <?=ucfirst(strtolower($rol->value))?>
+                    </option>
+                    <?php endif; ?>
+                <?php endforeach; ?>   
+            </select>
+        </div>
+        <input type="submit" value="Actualizar" class="inline-block border px-4 py-1 bg-red-600 text-white hover:bg-red-700 rounded">
+    </form>
 </div>

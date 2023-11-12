@@ -1,15 +1,30 @@
-<form action="/user/updateUser" method="post">
-    <label for="nombre">Nombre:</label>
-    <input type="text" name="nombre" id="nombre" value="<?= htmlspecialchars($db_user->getNombre()) ?>" >
-    <label for="ocupacion">Ocupación:</label>
-    <input type="text" name="ocupacion" id="ocupacion" value="<?= htmlspecialchars($db_user->getOcupacion()) ?>" >
-    <label for="birthday">Año de nacimiento:</label>
-    <input type="number" name="birthday" id="birthday" value="<?= htmlspecialchars($db_user->getBirthday()) ?>" >
-    <label for="pais">País:</label>
-    <select name="pais" id="pais" >
-        <option value="">Seleccione un país</option>
-        <option value="1" <?php if ($db_user->getIdPais() === 1) echo "selected" ?>>El Salvador</option>
-        <option value="2" <?php if ($db_user->getIdPais() === 2) echo "selected" ?>>México</option>
-    </select>
-    <input type="submit" value="Guardar cambios">
-</form>
+<div class="w-full flex flex-col items-center">
+    <h3 class="text-lg text-center font-bold">Editar Cuenta</h3>
+    <form action="/user/updateUser" method="post" class="w-full max-w-xs flex flex-col">
+        <div class="my-2">
+            <label for="nombre">Nombre:</label>
+            <input type="text" name="nombre" id="nombre" value="<?= htmlspecialchars($db_user->getNombre()) ?>" class="border bg-neutral-50 appearance-none rounded w-full py-1 px-2 focus:bg-white transition duration-300 outline-none focus:border-gray-500">
+        </div>
+        <div class="my-2">
+            <label for="ocupacion">Ocupación:</label>
+            <input type="text" name="ocupacion" id="ocupacion" value="<?= htmlspecialchars($db_user->getOcupacion()) ?>" class="border bg-neutral-50 appearance-none rounded w-full py-1 px-2 focus:bg-white transition duration-300 outline-none focus:border-gray-500">
+        </div>
+        <div class="my-2">
+            <label for="birthday">Año de nacimiento:</label>
+            <input type="number" name="birthday" id="birthday" value="<?= htmlspecialchars($db_user->getBirthday()) ?>" class="border bg-neutral-50 appearance-none rounded w-full py-1 px-2 focus:bg-white transition duration-300 outline-none focus:border-gray-500">
+        </div>
+        <div class="my-2">
+            <label for="pais">País:</label>
+            <select name="pais" id="pais" class="border bg-neutral-50 appearance-none rounded w-full py-1 px-2 focus:bg-white transition duration-300 outline-none focus:border-gray-500">
+                <?php if (isset($paises)): ?>
+                    <?php foreach($paises as $p): ?>
+                        <option value="<?=$p->getId()?>" <?=($p->getNombre()==$pais) ? "selected" : ""?>>
+                            <?=$p->getNombre()?>
+                        </option>    
+                    <?php endforeach; ?>    
+                <?php endif; ?>
+            </select>
+        </div>
+        <input type="submit" value="Guardar cambios" class="self-end border rounded bg-red outline-none py-1 px-2 my-2 bg-red-600 text-white hover:bg-red-700 cursor-pointer">
+    </form>
+</div>

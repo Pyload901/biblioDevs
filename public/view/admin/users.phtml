@@ -4,10 +4,12 @@
     <?php if(isset($users)): ?>
         <div class="grid grid-cols-6 gap-2">
         <?php foreach($users as $user): ?>
+            <?php if (Utils::isSuper() || $user->getRole() == Role::USER->value): ?>
             <a href="/admin/user&id=<?=$user->getId();?>" class="border box-border p-2 flex flex-col rounded hover:bg-gray-100 text-center">
                 <p><?=$user->getEmail()?></p>
                 <h4><?=$user->getNombre()?></h4>
             </a>
+            <?php endif; ?>
         <?php endforeach; ?>
         </div>
     <?php endif; ?>

@@ -28,7 +28,7 @@
         </div>
         <div class="my-2">
             <label class="block" for="pais">Pais:</label>
-            <select name="pais" id="pais" class="border rounded py-1 px-2 w-full outline-none focus:border-gray-500">
+            <select name="pais" id="pais" class="border bg-neutral-50 appearance-none rounded w-full py-1 px-2 focus:bg-white transition duration-300 outline-none focus:border-gray-500">
                 <option value="">-- Seleccione un país --</option>
                 <?php if (isset($paises)): ?>
                     <?php foreach($paises as $pais):?>
@@ -39,6 +39,6 @@
                 <?php endif; ?>
             </select>
         </div>
-        <input type="submit" value="Registrarse" class="self-end border rounded bg-red outline-none py-1 px-2 my-2">
+        <input type="submit" value="Registrarse" class="self-end border rounded bg-red-600 text-white hover:bg-red-700 cursor-pointer outline-none py-1 px-2 my-2">
     </form>
 </div>

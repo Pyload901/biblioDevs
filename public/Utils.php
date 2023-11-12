@@ -23,4 +23,10 @@ class Utils {
             isset($_ENV["DEV"])
         );
     }
+    public static function isSuper(): bool {
+        return (
+            isset($_SESSION["user_role"])
+            && ($_SESSION["user_role"] == Role::SUPER->value)
+        );
+    }
 }

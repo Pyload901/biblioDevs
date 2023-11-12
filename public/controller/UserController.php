@@ -1,25 +1,26 @@
 <?php
 class UserController {
     public static function Index() {
-        require_once "./model/UserModel.php";
         $errors = array();
-    
-        if (isset($_SESSION["user_id"])) {
+        
+        if (Utils::isLogged()) {
+            require_once "./model/UserModel.php";
             $user_id = $_SESSION["user_id"];
             $user = new UserModel();
+            $user->setId($user_id);
             $db_user = $user->GetById($user_id);
-    
-            if ($db_user) {
-            } else {
-                $errors = array_merge($errors, array("Usuario no encontrado"));
-            }
+            $pais = $user->GetPais();
+
+            require_once "./view/user/account.phtml";
         } else {
-            $errors = array_merge($errors, array("Usuario no autenticado"));
+            header("Location: /");
         }
     
-        require_once "./view/user/account.phtml";
     }
     public static function Login() {
+        if (Utils::isLogged()) {
+            header("Location: /");
+        }
         $errors = array();
         require_once "./model/UserModel.php";
         if (
@@ -53,6 +54,9 @@ class UserController {
         require_once "./view/user/login.phtml";
     }
     public static function Signup() {
+        if (Utils::isLogged()) {
+            header("Location: /");
+        }
         require_once "./model/UserModel.php";
         $errors = array();
         if(
@@ -101,38 +105,25 @@ class UserController {
         session_destroy();
         header("Location: /");
     }
-
-        
-    public static function ShowUser() {
-        require_once "./model/UserModel.php";
-        $errors = array();
-    
-        if (isset($_SESSION["user_id"])) {
-            $user_id = $_SESSION["user_id"];
-            $user = new UserModel();
-            $db_user = $user->GetById($user_id);
-    
-            if ($db_user) {
-            } else {
-                $errors = array_merge($errors, array("Usuario no encontrado"));
-            }
-        } else {
-            $errors = array_merge($errors, array("Usuario no autenticado"));
-        }
-    
-        require_once "./view/user/account_change.phtml";
-    }
     
     public static function UpdateUser() {
-        require_once "./model/UserModel.php";
-        $errors = array();
-    
-        if (isset($_SESSION["user_id"])) {
-            $user_id = $_SESSION["user_id"];
+        if (Utils::isLogged()) {
+            $errors = array();
+            require_once "./model/UserModel.php";
+            require_once "./model/PaisModel.php";
             $user = new UserModel();
+            $user_id = $_SESSION["user_id"];
             $user->setId($user_id);
-    
-            if (!empty($_POST)) {
+
+            if (
+                !empty($_POST)
+                && !empty($_POST["nombre"])
+                && !empty($_POST["ocupacion"])
+                && !empty($_POST["birthday"])
+                && !empty($_POST["pais"])
+                && !empty($_POST["nombre"])
+                
+            ) {
                 // Actualizar los campos con los nuevos valores del formulario
                 $user->setNombre(strip_tags($_POST["nombre"]))
                     ->setOcupacion(strip_tags($_POST["ocupacion"]))
@@ -147,32 +138,30 @@ class UserController {
                 }
             }
             $db_user = $user->GetById($user_id);
-    
-            if ($db_user) {
-            } else {
-                $errors = array_merge($errors, array("Usuario no encontrado"));
-            }
+            $paisModel = new PaisModel();
+            $paises = $paisModel->GetAll();
+            $pais = $user->GetPais();
             require_once "./view/user/account_change.phtml";
         } else {
-            $errors = array_merge($errors, array("Usuario no autenticado"));
+            header("Location: /user/login");
         }
     }     
     
     public static function ChangePassword() {
-        // Código para mostrar la vista change_password.phtml
-        require_once "./view/user/password.phtml";
-    }
-    
-    public static function UpdatePassword() {
-        require_once "./model/UserModel.php";
-        $errors = array();
-    
-        if (isset($_SESSION["user_id"])) {
+        if (Utils::isLogged()) {
+            require_once "./model/UserModel.php";
+            $errors = array();
             $user_id = $_SESSION["user_id"];
+
             $user = new UserModel();
             $user->setId($user_id);
     
-            if (!empty($_POST)) {
+            if (
+                !empty($_POST)
+                && !empty($_POST["current_password"])
+                && !empty($_POST["new_password"])
+                && !empty($_POST["confirm_password"])
+            ) {
                 $currentPassword = strip_tags($_POST["current_password"]);
                 $newPassword = strip_tags($_POST["new_password"]);
                 $confirmPassword = strip_tags($_POST["confirm_password"]);
@@ -191,15 +180,11 @@ class UserController {
                     $errors = array_merge($errors, array("Contraseña actual incorrecta"));
                 }
             }
-    
-            // Cargar la vista nuevamente con los errores
-            echo "hola";
-            require_once "./view/user/password.phtml";
         } else {
-            $errors = array_merge($errors, array("Usuario no autenticado"));
+            header("Location: /user/login");
         }
-    }
-    
-    
+        // Código para mostrar la vista change_password.phtml
+        require_once "./view/user/password.phtml";
+    }   
    
 }

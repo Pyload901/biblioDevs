@@ -1,7 +1,8 @@
 <div class="w-full">
+    <h3 class="font-bold">Estantería del usuario</h3>
     <?php if (empty($_GET["id"])): ?>
         <div class="w-full my-2">
-            <a href="/home/agregar" class="inline-block border px-4 py-1 bg-red-500 text-white rounded">Agregar</a>
+            <a href="/home/agregar" class="inline-block border px-4 py-1 bg-red-600 text-white hover:bg-red-700 rounded">Agregar</a>
         </div>
     <?php endif; ?>
     <?php if (isset($libros)): ?>
@@ -13,5 +14,7 @@
                 </a>
             <?php endforeach; ?>
         </div>
+    <?php else: ?>
+        <p class="">No hay libros en la estantería</p>
     <?php endif; ?>
 </div>

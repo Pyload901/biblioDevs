@@ -1,24 +1,30 @@
-<form action="/user/updateUser" method="post">
-    <label for="nombre">Nombre:</label>
-    <span id="nombre"><?= htmlspecialchars($db_user->getNombre()) ?></span><br>
-    <label for="email">Email:</label>
-    <span id="email"><?= htmlspecialchars($db_user->getEmail()) ?></span><br>
-    <label for="ocupacion">Ocupación:</label>
-    <span id="ocupacion"><?= htmlspecialchars($db_user->getOcupacion()) ?></span><br>
-    <label for="birthday">Año de nacimiento:</label>
-    <span id="birthday"><?= htmlspecialchars($db_user->getBirthday()) ?></span><br>
-    <label for="pais">País:</label>
-    <span id="pais">
-        <?php
-            $selectedCountry = "";
-            if ($db_user->getIdPais() === 1) {
-                $selectedCountry = "El Salvador";
-            } elseif ($db_user->getIdPais() === 2) {
-                $selectedCountry = "México";
-            }
-            echo htmlspecialchars($selectedCountry);
-        ?>
-    </span><br>
-    <a href="/user/UpdateUser" id="editarEnlace">Editar</a>
-    <a href="/user/UpdatePassword" id="editarEnlace">Editar Contraseña</a>
-</form>
+<div class="w-full flex flex-col items-center">
+    <h3 class="text-lg text-center font-bold">Informacion del usuario</h3>
+    <div class="grid grid-cols-2 gap-2 max-w-xs">
+        <div>
+            <p class="font-bold">Nombre:</p>
+            <p><?= ($db_user->getNombre()) ?></p>
+        </div>
+        <div>
+            <p class="font-bold">Email:</p>
+            <p><?= ($db_user->getEmail()) ?></p>
+        </div>
+        <div>
+            <p class="font-bold">Ocupación:</p>
+            <p><?= ($db_user->getOcupacion()) ?></p>
+        </div>
+        <div>
+            
+            <p class="font-bold">Año de nacimiento:</p>
+            <p><?= ($db_user->getBirthday()) ?></p>
+        </div>
+        <div>
+            <p class="font-bold">País:</p>
+            <p><?=(isset($pais)) ? $pais : "N/A"?></p>
+        </div>
+    </div>
+    <div class="flex flex-col justify-between items-center">
+        <a href="/user/updateUser" class="text-center w-full border rounded py-1 px-2 my-2 bg-red-600 text-white hover:bg-red-700">Editar</a>
+        <a href="/user/changePassword" class="text-center w-full border rounded py-1 px-2 my-2 bg-red-600 text-white hover:bg-red-700">Cambiar contraseña</a>
+    </div>
+</div>

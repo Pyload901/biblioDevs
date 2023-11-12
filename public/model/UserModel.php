@@ -12,15 +12,6 @@ class UserModel {
     public function __construct() {
         $this->DB = Database::Connect();
     }
-    // public function __construct(string $nombre, string $email, string $password, string $birthday, int $id_pais, string $ocupacion){
-    //     $this->nombre = $nombre;
-    //     $this->email = $email;
-    //     $this->password = $password;
-    //     $this->birthday = $birthday;
-    //     $this->id_pais = $id_pais;
-    //     $this->ocupacion = $ocupacion;
-    //     $this->DB = Database::Connect();
-    // }
     public function Save() : bool {
         try {
             $stmt = $this->DB->prepare("INSERT INTO Usuario(nombre, email, password, birthday, id_pais, ocupacion, role) VALUES(?,?,?,?,?,?,'USER')");
@@ -105,7 +96,7 @@ class UserModel {
     }
     public function GetAll(): array | null {
         try {
-            $stmt = $this->DB->prepare("SELECT id, nombre, email FROM Usuario");
+            $stmt = $this->DB->prepare("SELECT id, nombre, email, role FROM Usuario");
             $stmt->execute();
             $stmt->setFetchMode(PDO::FETCH_CLASS, UserModel::class);
             $rows = $stmt->fetchAll();
@@ -114,6 +105,48 @@ class UserModel {
             return null;
         } catch(PDOException $e) {
             if ($_ENV["DEV"]) {
+                echo $e->getMessage();
+            }
+            return null;
+        }
+    }
+    public function GetUserRole(): object | null {
+        try {
+            $stmt = $this->DB->prepare("SELECT role FROM Usuario WHERE id=?");
+            $stmt->bindParam(1, $this->id, PDO::PARAM_INT);
+            $stmt->execute();
+            $stmt->setFetchMode(PDO::FETCH_OBJ);
+            return $stmt->fetch();
+        } catch (PDOException $e) {
+            if (Utils::isDevMode()) {
+                echo $e->getMessage();
+            }
+            return null;
+        }
+    }
+    public function ChangeRole() : bool {
+        try {
+            $stmt = $this->DB->prepare("UPDATE Usuario SET role=? WHERE id = ?");
+            $stmt->bindParam(1, $this->role, PDO::PARAM_STR);
+            $stmt->bindParam(2, $this->id, PDO::PARAM_INT);
+            return $stmt->execute();
+        } catch (PDOException $e) {
+            if (Utils::isDevMode()) {
+                echo $e->getMessage();
+            }
+            return false;
+        }
+    }
+
+    public function GetPais() : string | null {
+        try {
+            $stmt = $this->DB->prepare("SELECT P.nombre FROM Usuario U INNER JOIN Pais P ON U.id_pais=P.id WHERE U.id = ?");
+            $stmt->bindParam(1, $this->id, PDO::PARAM_INT);
+            $stmt->execute();
+            $stmt->setFetchMode(PDO::FETCH_OBJ);
+            return $stmt->fetch()->nombre;
+        } catch (PDOException $e) {
+            if (Utils::isDevMode()) {
                 echo $e->getMessage();
             }
             return null;

@@ -15,13 +15,30 @@ class AdminController{
         }
         if (isset($_GET["id"])) {
             require_once "./model/LibroModel.php";
+            require_once "./model/UserModel.php";
             $id_usuario = $_GET["id"];
             
             $_SESSION["editing_user"] = $id_usuario;
 
             $libro = new LibroModel();
             $libros = $libro->GetAll($id_usuario);
-            require_once "./view/admin/user.phtml";
+            if (Utils::isSuper()) {
+                $usuario = new UserModel();
+                $usuario->setId($id_usuario);
+                if (isset($_POST) && isset($_POST["role"])) {
+                    $role = strip_tags($_POST["role"]);
+                    if ($role != Role::SUPER->value) {
+                        $usuario->setRole($role);
+                        if ($usuario->ChangeRole()) {
+
+                        } else {
+                            
+                        }
+                    }
+                }
+                $role = $usuario->GetUserRole()->role;
+                require_once "./view/admin/user.phtml";
+            }
             require_once "./view/home/estanteria.phtml";
         } else {
             header("Location: /admin");
