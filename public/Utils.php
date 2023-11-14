@@ -29,4 +29,21 @@ class Utils {
             && ($_SESSION["user_role"] == Role::SUPER->value)
         );
     }
+    public static function emailChecker($email): bool {
+        $res = true;
+        if (!filter_var($email, FILTER_VALIDATE_EMAIL))
+            $res = false;
+        return $res;
+    }
+    public static function passwordChecker($password): bool {
+        $res = false;
+        $uppercase = preg_match('@[A-Z]@', $password);
+        $lowercase = preg_match('@[a-z]@', $password);
+        $number    = preg_match('@[0-9]@', $password);
+        $specialChars = preg_match('@[^\w]@', $password);
+        if ($uppercase && $lowercase && $number && $specialChars && strlen($password) > 8) {
+            $res = true;
+        }
+        return $res;
+    }
 }

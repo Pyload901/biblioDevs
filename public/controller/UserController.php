@@ -68,28 +68,34 @@ class UserController {
             && !empty($_POST["birthday"])
             && !empty($_POST["pais"])
         ) {
-            $nombre = strip_tags($_POST["nombre"]);
             $email = strip_tags($_POST["email"]);
             $password = strip_tags($_POST["password"]);
-            $ocupacion = strip_tags($_POST["ocupacion"]);
-            $birthday = strip_tags($_POST["birthday"]);
-            $pais = strip_tags($_POST["pais"]);
-
-            // encrypt password
-            $hash = password_hash($password, PASSWORD_BCRYPT);
-            $user = new UserModel();
-            $user->setNombre($nombre)
-                ->setEmail($email)
-                ->setPassword($hash)
-                ->setBirthday($birthday)
-                ->setIdPais($pais)
-                ->setOcupacion($ocupacion);
-
-            if ($user->Save()) {
-                header("Location: /user/login");
+            if (!Utils::emailChecker($email)) {
+                $errors = array_merge($errors, array("Debe ingresar un correo válido"));
+            } else if (!Utils::passwordChecker($password)) {
+                $errors = array_merge($errors, array("La contraseña tener una longitud de más de 8 caracteres y contener al menos, 1 mayúscula, 1 minúscula, 1 número y 1 símbolo especial"));
             } else {
-                $errors = array_merge($errors, array("Ha ocurrido un error, intenta nuevamente. Es posible que este correo ya haya sido registrado"));
-            }   
+                $nombre = strip_tags($_POST["nombre"]);
+                $ocupacion = strip_tags($_POST["ocupacion"]);
+                $birthday = strip_tags($_POST["birthday"]);
+                $pais = strip_tags($_POST["pais"]);
+    
+                // encrypt password
+                $hash = password_hash($password, PASSWORD_BCRYPT);
+                $user = new UserModel();
+                $user->setNombre($nombre)
+                    ->setEmail($email)
+                    ->setPassword($hash)
+                    ->setBirthday($birthday)
+                    ->setIdPais($pais)
+                    ->setOcupacion($ocupacion);
+    
+                if ($user->Save()) {
+                    header("Location: /user/login");
+                } else {
+                    $errors = array_merge($errors, array("Ha ocurrido un error, intenta nuevamente. Es posible que este correo ya haya sido registrado"));
+                }
+            }
         } else {
             $errors = array_merge($errors, array("No se han completado los campos"));
         }
@@ -165,14 +171,18 @@ class UserController {
                 $currentPassword = strip_tags($_POST["current_password"]);
                 $newPassword = strip_tags($_POST["new_password"]);
                 $confirmPassword = strip_tags($_POST["confirm_password"]);
-    
+                
                 // Verificar que la contraseña actual sea correcta
                 $db_user = $user->GetById($user_id);
                 if ($db_user && password_verify($currentPassword, $db_user->getPassword())) {
                     if ($newPassword === $confirmPassword) {
                         // Actualizar la contraseña
-                        $user->UpdatePassword($newPassword);
-                        header("Location: /user"); // Redirige al usuario a su perfil o a donde desees
+                        if (Utils::passwordChecker($newPassword)) {
+                            $user->UpdatePassword($newPassword);
+                            header("Location: /user"); // Redirige al usuario a su perfil o a donde desees
+                        } else {
+                            $errors = array_merge($errors, array("La contraseña tener una longitud de más de 8 caracteres y contener al menos, 1 mayúscula, 1 minúscula, 1 número y 1 símbolo especial"));
+                        }
                     } else {
                         $errors = array_merge($errors, array("Las contraseñas no coinciden"));
                     }
