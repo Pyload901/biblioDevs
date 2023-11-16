@@ -10,14 +10,17 @@
  * optionals:
  * DEV (with any value)
  */
-error_reporting( E_ALL );
-ini_set( "display_errors", 1 );
 require_once "./autoload.php";
 require_once "../config/config.php";
 require_once "../config/Database.php";
 require_once "./Utils.php";
+if (Utils::isDevMode()) {
+    error_reporting( E_ALL );
+    ini_set( "display_errors", 1 );
+}
 
-$HOST = (isset($_ENV["APP_HOST"]) ? $_ENV["APP_HOST"] :"http://localhost/");
+// echo gethostname();
+$HOST = (isset($_ENV["APP_HOST"]) ? $_ENV["APP_HOST"] : $_SERVER["HOST_NAME"]);
 $controller_name = "HomeController";
 $method = "Index";
 if (isset($_GET["controller"])) {
