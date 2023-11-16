@@ -9,18 +9,18 @@
 ?>
 <div class="w-full flex flex-col items-center">
     <h3 class="text-lg text-center font-bold">Agregar un libro</h3>
-
+    <?php require_once Utils::getErrorsView(); ?>
     <form method="POST" class="flex flex-col w-96 w-max-lg">
         <div class="my-2">
-            <label for="isbn" class="block">ISBN:</label>
+            <label for="isbn" class="block">ISBN: <span class="text-red-600">*</span></label>
             <input class="border bg-neutral-50 appearance-none rounded w-full py-1 px-2 focus:bg-white focus:border-gray-500 transition duration-300 outline-none" type="text" name="isbn" id="isbn" value="<?=$isbn?>">
         </div>
         <div class="my-2">
-            <label for="titulo" class="block">Titulo:</label>
+            <label for="titulo" class="block">Titulo: <span class="text-red-600">*</span></label>
             <input class="border bg-neutral-50 appearance-none rounded w-full py-1 px-2 focus:bg-white focus:border-gray-500 transition duration-300 outline-none" type="text" name="titulo" id="titulo" value="<?=$titulo?>">
         </div>
         <div class="my-2">
-            <label for="autor" class="block">Autor:</label>
+            <label for="autor" class="block">Autor: <span class="text-red-600">*</span></label>
             <input class="border bg-neutral-50 appearance-none rounded w-full py-1 px-2 focus:bg-white focus:border-gray-500 transition duration-300 outline-none" type="text" name="autor" id="autor" value="<?=$autor?>">
         </div>
         <div class="my-2">

@@ -51,11 +51,11 @@ class UserModel {
         try {
             $stmt = $this->DB->prepare("SELECT id, nombre, email, password, birthday, id_pais, ocupacion, role FROM Usuario WHERE id = ?");
             $stmt->bindParam(1, $id, PDO::PARAM_INT);
-            if ($stmt->execute()) {
-                $stmt->setFetchMode(PDO::FETCH_CLASS, UserModel::class);
-                $user = $stmt->fetch();
+            $stmt->execute();
+            $stmt->setFetchMode(PDO::FETCH_CLASS, UserModel::class);
+            $user = $stmt->fetch();
+            if ($user)
                 return $user;
-            }
             return null;
         } catch (PDOException $e) {
             return null;
@@ -94,9 +94,10 @@ class UserModel {
             return false;
         }
     }
-    public function GetAll(): array | null {
+    public function GetAll(int $admin_id): array | null {
         try {
-            $stmt = $this->DB->prepare("SELECT id, nombre, email, role FROM Usuario");
+            $stmt = $this->DB->prepare("SELECT id, nombre, email, role FROM Usuario WHERE id != ?");
+            $stmt->bindParam(1, $admin_id, PDO::PARAM_INT);
             $stmt->execute();
             $stmt->setFetchMode(PDO::FETCH_CLASS, UserModel::class);
             $rows = $stmt->fetchAll();
@@ -116,7 +117,11 @@ class UserModel {
             $stmt->bindParam(1, $this->id, PDO::PARAM_INT);
             $stmt->execute();
             $stmt->setFetchMode(PDO::FETCH_OBJ);
-            return $stmt->fetch();
+            $rows = $stmt->fetch();
+            if ($rows) {
+                return $rows;
+            }
+            return null;
         } catch (PDOException $e) {
             if (Utils::isDevMode()) {
                 echo $e->getMessage();

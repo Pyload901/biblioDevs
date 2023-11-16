@@ -1,10 +1,6 @@
 <div class="w-full flex flex-col items-center">
     <h3 class="text-lg text-center font-bold">Registro</h3>
-    <?php if(!empty($errors)):?>
-        <?php foreach($errors as $error): ?>
-            <p><?=$error?></p><br>
-        <?php endforeach;?>
-    <?php endif;?>
+    <?php require_once Utils::getErrorsView(); ?>
     <form action="" method="post" class="w-full flex flex-col max-w-xs">
         <div class="my-2">
             <label class="block" for="nombre">Nombre:</label>

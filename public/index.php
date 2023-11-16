@@ -18,9 +18,7 @@ if (Utils::isDevMode()) {
     error_reporting( E_ALL );
     ini_set( "display_errors", 1 );
 }
-
-// echo gethostname();
-$HOST = (isset($_ENV["APP_HOST"]) ? $_ENV["APP_HOST"] : $_SERVER["HOST_NAME"]);
+$HOST = (isset($_ENV["APP_HOST"]) ? $_ENV["APP_HOST"] : "http://" . $_SERVER["SERVER_NAME"]) . "/";
 $controller_name = "HomeController";
 $method = "Index";
 if (isset($_GET["controller"])) {

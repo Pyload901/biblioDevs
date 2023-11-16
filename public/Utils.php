@@ -40,10 +40,13 @@ class Utils {
         $uppercase = preg_match('@[A-Z]@', $password);
         $lowercase = preg_match('@[a-z]@', $password);
         $number    = preg_match('@[0-9]@', $password);
-        $specialChars = preg_match('@[^\w]@', $password);
+        $specialChars = preg_match('@[\W]+@', $password);
         if ($uppercase && $lowercase && $number && $specialChars && strlen($password) > 8) {
             $res = true;
         }
         return $res;
+    }
+    public static function getErrorsView(): string {
+        return "./view/error/messages.phtml";
     }
 }

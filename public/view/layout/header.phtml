@@ -24,8 +24,8 @@
                 <a href="/user" title="Cuenta"><img class="mx-2 w-6 inline" src="<?=$HOST?>/assets/icons/usuario.png" alt="Cuenta"></a>
                 <a href="/user/logout" title="Cerrar sesión"><img class="mx-2 w-6 inline" src="<?=$HOST?>/assets/icons/logout.png" alt="Cerrar sesión"></a>
             <?php else: ?>
-                <a href="/user/login">Iniciar Sesion</a>
-                <a href="/user/signup">Registrarse</a>
+                <a href="/user/login" class="self-end border rounded bg-red-600 text-white hover:bg-red-700 cursor-pointer outline-none py-1 px-2 my-2">Iniciar Sesion</a>
+                <a href="/user/signup" class="self-end border rounded bg-red-600 text-white hover:bg-red-700 cursor-pointer outline-none py-1 px-2 my-2">Registrarse</a>
             <?php endif; ?>
         </nav>
     </header>

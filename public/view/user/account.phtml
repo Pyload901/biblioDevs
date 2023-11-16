@@ -22,8 +22,12 @@
             <p class="font-bold">País:</p>
             <p><?=(isset($pais)) ? $pais : "N/A"?></p>
         </div>
+        <div>
+            <p class="font-bold">Rol:</p>
+            <p><?= ucfirst(strtolower($db_user->getRole()))?></p>
+        </div>
     </div>
-    <div class="flex flex-col justify-between items-center">
+    <div class="flex flex-col justify-between items-center my-2">
         <a href="/user/updateUser" class="text-center w-full border rounded py-1 px-2 my-2 bg-red-600 text-white hover:bg-red-700">Editar</a>
         <a href="/user/changePassword" class="text-center w-full border rounded py-1 px-2 my-2 bg-red-600 text-white hover:bg-red-700">Cambiar contraseña</a>
     </div>

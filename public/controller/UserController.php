@@ -70,14 +70,16 @@ class UserController {
         ) {
             $email = strip_tags($_POST["email"]);
             $password = strip_tags($_POST["password"]);
+            $birthday = strip_tags($_POST["birthday"]);
             if (!Utils::emailChecker($email)) {
                 $errors = array_merge($errors, array("Debe ingresar un correo válido"));
             } else if (!Utils::passwordChecker($password)) {
                 $errors = array_merge($errors, array("La contraseña tener una longitud de más de 8 caracteres y contener al menos, 1 mayúscula, 1 minúscula, 1 número y 1 símbolo especial"));
-            } else {
+            } else if ($birthday < (int)date("Y") - 100 || $birthday > (int)date("Y") + 100) {
+                $errors = array_merge($errors, array("Debe ingresar un año de nacimiento válido"));
+            }else {
                 $nombre = strip_tags($_POST["nombre"]);
                 $ocupacion = strip_tags($_POST["ocupacion"]);
-                $birthday = strip_tags($_POST["birthday"]);
                 $pais = strip_tags($_POST["pais"]);
     
                 // encrypt password
@@ -130,18 +132,24 @@ class UserController {
                 && !empty($_POST["nombre"])
                 
             ) {
-                // Actualizar los campos con los nuevos valores del formulario
-                $user->setNombre(strip_tags($_POST["nombre"]))
-                    ->setOcupacion(strip_tags($_POST["ocupacion"]))
-                    ->setBirthday(strip_tags($_POST["birthday"]))
-                    ->setIdPais(strip_tags($_POST["pais"]));
-    
-             
-                if ($user->Update()) {
-                    header("Location: /user"); 
+                if ($birthday < (int)date("Y") - 100 || $birthday > (int)date("Y") + 100) {
+                    $errors = array_merge($errors, array("Debe ingresar un año válido"));
                 } else {
-                    $errors = array_merge($errors, array("Ha ocurrido un error al guardar los cambios."));
+                    // Actualizar los campos con los nuevos valores del formulario
+                    $user->setNombre(strip_tags($_POST["nombre"]))
+                        ->setOcupacion(strip_tags($_POST["ocupacion"]))
+                        ->setBirthday(strip_tags($_POST["birthday"]))
+                        ->setIdPais(strip_tags($_POST["pais"]));
+        
+                 
+                    if ($user->Update()) {
+                        header("Location: /user"); 
+                    } else {
+                        $errors = array_merge($errors, array("Ha ocurrido un error al guardar los cambios."));
+                    }
                 }
+            } else {
+                $errors = array_merge($errors, array("No se completaron los campos"));
             }
             $db_user = $user->GetById($user_id);
             $paisModel = new PaisModel();

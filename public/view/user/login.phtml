@@ -1,10 +1,6 @@
 <div class="w-full flex flex-col items-center">
     <h3 class="text-lg text-center font-bold">Inicia sesión</h3>
-    <?php if(!empty($errors)):?>
-        <?php foreach($errors as $error): ?>
-            <p><?=$error?></p><br>
-        <?php endforeach;?>
-    <?php endif;?>
+    <?php require_once Utils::getErrorsView(); ?>
     <form method="post" class="w-full max-w-xs flex flex-col">
         <div class="my-2">
             <label for="email" class="block">Email: </label>

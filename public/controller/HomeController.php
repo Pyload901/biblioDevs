@@ -14,6 +14,7 @@ class HomeController {
         if (!Utils::isLogged()) {
             header("Location: /user/login");
         }
+        $errors = array();
         if (
             !empty($_POST["isbn"])
             && !empty($_POST["titulo"])
@@ -29,22 +30,28 @@ class HomeController {
             $edicion = (isset($_POST["edicion"]) ? (int)strip_tags($_POST["edicion"]) : null);
             $leido = (isset($_POST["leido"]) ? (bool)strip_tags($_POST["leido"]) : false);
 
-            $libro = new LibroModel();
-            $libro->setIsbn($isbn)
-                ->settitulo($titulo)
-                ->setAutor($autor)
-                ->setDescripcion($descripcion)
-                ->setYear($year)
-                ->setEdicion($edicion)
-                ->setLeido($leido);
-
-            if ($libro->Save($id_usuario)) {
-                header("Location: /");
+            if (!empty($year) && ($year < 1600 || $year > (int)date("Y"))) {
+                $errors = array_merge($errors, array("Debe ingresar un año válido"));
+            } else if (!empty($edicion) && $edicion < 1) {
+                $errors = array_merge($errors, array("Debe ingresar una edición válida"));
             } else {
-                echo "Ha ocurrido un error";
+                $libro = new LibroModel();
+                $libro->setIsbn($isbn)
+                    ->settitulo($titulo)
+                    ->setAutor($autor)
+                    ->setDescripcion($descripcion)
+                    ->setYear($year)
+                    ->setEdicion($edicion)
+                    ->setLeido($leido);
+    
+                if ($libro->Save($id_usuario)) {
+                    header("Location: /");
+                } else {
+                    echo "Ha ocurrido un error";
+                }
             }
         } else {
-            echo  "No se llenaron los campos necesarios";
+            $errors = array_merge($errors, array("No se completaron los campos necesarios"));
         }
         require_once "./view/home/agregar.phtml";
     }
