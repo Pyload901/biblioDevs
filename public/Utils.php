@@ -49,6 +49,14 @@ class Utils {
     public static function isInteger($exp): bool {
         return (!preg_match("/[^0-9]/",$exp));
     }
+    public static function generateCSRFToken(): string {
+        $token = md5(uniqid(mt_rand(), true));
+        $_SESSION["token"] = $token;
+        return $token;
+    }
+    public static function validateCSRFToken(): bool {
+        return ($_POST["token"] === $_SESSION["token"]);
+    }
     public static function getErrorsView(): string {
         return "./view/error/messages.phtml";
     }

@@ -26,7 +26,12 @@ class UserController {
         if (
             !empty($_POST["email"]) 
             && !empty($_POST["password"])
+            && !empty($_POST["token"])
         ) {
+            if (!Utils::validateCSRFToken()) {
+                $errors = array_merge($errors, array("No se ha podido iniciar sesión"));
+                return;
+            }
             $email = strip_tags($_POST["email"]);
             $password = strip_tags($_POST["password"]);
             $user = new UserModel();
@@ -67,7 +72,12 @@ class UserController {
             && !empty($_POST["ocupacion"])
             && !empty($_POST["birthday"])
             && !empty($_POST["pais"])
+            && !empty($_POST["token"])
         ) {
+            if (!Utils::validateCSRFToken()) {
+                $errors = array_merge($errors, array("No se ha podido iniciar sesión"));
+                return;
+            }
             $email = strip_tags($_POST["email"]);
             $password = strip_tags($_POST["password"]);
             $birthday = strip_tags($_POST["birthday"]);
