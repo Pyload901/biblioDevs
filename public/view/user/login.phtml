@@ -2,7 +2,7 @@
     <h3 class="text-lg text-center font-bold">Inicia sesión</h3>
     <?php require_once Utils::getErrorsView(); ?>
     <form method="post" class="w-full max-w-xs flex flex-col">
-        <input type="text" name="token" value="<?=Utils::generateCSRFToken()?>" hidden>
+        <input type="text" name="csrf_token" value="<?=Utils::generateCSRFToken()?>" hidden>
         <div class="my-2">
             <label for="email" class="block">Email: </label>
             <input required class="border bg-neutral-50 appearance-none rounded w-full py-1 px-2 focus:bg-white transition duration-300 outline-none focus:border-gray-500" type="email" name="email" id="email">

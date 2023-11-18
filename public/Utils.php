@@ -51,11 +51,11 @@ class Utils {
     }
     public static function generateCSRFToken(): string {
         $token = md5(uniqid(mt_rand(), true));
-        $_SESSION["token"] = $token;
+        $_SESSION["csrf_token"] = $token;
         return $token;
     }
     public static function validateCSRFToken(): bool {
-        return ($_POST["token"] === $_SESSION["token"]);
+        return ($_POST["csrf_token"] === $_SESSION["csrf_token"]);
     }
     public static function getErrorsView(): string {
         return "./view/error/messages.phtml";
