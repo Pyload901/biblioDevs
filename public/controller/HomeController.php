@@ -2,7 +2,6 @@
 require_once "./model/LibroModel.php";
 class HomeController {
     public static function Index () {
-        var_dump(Utils::isInteger("3-2"));
         if (!Utils::isLogged()) {
             header("Location: /user/login");
         }
