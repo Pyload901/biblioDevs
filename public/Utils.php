@@ -46,6 +46,9 @@ class Utils {
         }
         return $res;
     }
+    public static function isInteger($exp): bool {
+        return (!preg_match("/[^0-9]/",$exp));
+    }
     public static function getErrorsView(): string {
         return "./view/error/messages.phtml";
     }

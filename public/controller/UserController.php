@@ -77,7 +77,7 @@ class UserController {
                 $errors = array_merge($errors, array("La contraseña tener una longitud de más de 8 caracteres y contener al menos, 1 mayúscula, 1 minúscula, 1 número y 1 símbolo especial"));
             } else if ($birthday < (int)date("Y") - 100 || $birthday > (int)date("Y") + 100) {
                 $errors = array_merge($errors, array("Debe ingresar un año de nacimiento válido"));
-            }else {
+            } else {
                 $nombre = strip_tags($_POST["nombre"]);
                 $ocupacion = strip_tags($_POST["ocupacion"]);
                 $pais = strip_tags($_POST["pais"]);
