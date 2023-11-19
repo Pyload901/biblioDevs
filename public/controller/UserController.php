@@ -86,50 +86,51 @@ class UserController {
         ) {
             if (!Utils::validateCSRFToken()) {
                 $errors = array_merge($errors, array("No se ha podido iniciar sesión"));
-                return;
-            }
-            $email = strip_tags($_POST["email"]);
-            $password = strip_tags($_POST["password"]);
-            $birthday = strip_tags($_POST["birthday"]);
-            $nombre = strip_tags($_POST["nombre"]);
-            $ocupacion = strip_tags($_POST["ocupacion"]);
-            $pais = strip_tags($_POST["pais"]);
-
-            if (
-                Utils::isDir($_POST["csrf_token"])
-                || Utils::isDir($email) 
-                || Utils::isDir($password)
-                || Utils::isDir($birthday)
-                || Utils::isDir($nombre)
-                || Utils::isDir($ocupacion)
-                || Utils::isDir($pais)
-            ) {
-                $errors = array_merge($errors, array("No se ha podido iniciar sesión"));
-                return;
-            }
-            if (!Utils::emailChecker($email)) {
-                $errors = array_merge($errors, array("Debe ingresar un correo válido"));
-            } else if (!Utils::passwordChecker($password)) {
-                $errors = array_merge($errors, array("La contraseña tener una longitud de más de 8 caracteres y contener al menos, 1 mayúscula, 1 minúscula, 1 número y 1 símbolo especial"));
-            } else if ($birthday < (int)date("Y") - 100 || $birthday > (int)date("Y") + 100) {
-                $errors = array_merge($errors, array("Debe ingresar un año de nacimiento válido"));
             } else {
-                
+
+                $email = strip_tags($_POST["email"]);
+                $password = strip_tags($_POST["password"]);
+                $birthday = strip_tags($_POST["birthday"]);
+                $nombre = strip_tags($_POST["nombre"]);
+                $ocupacion = strip_tags($_POST["ocupacion"]);
+                $pais = strip_tags($_POST["pais"]);
     
-                // encrypt password
-                $hash = password_hash($password, PASSWORD_BCRYPT);
-                $user = new UserModel();
-                $user->setNombre($nombre)
-                    ->setEmail($email)
-                    ->setPassword($hash)
-                    ->setBirthday($birthday)
-                    ->setIdPais($pais)
-                    ->setOcupacion($ocupacion);
-    
-                if ($user->Save()) {
-                    header("Location: /user/login");
+                if (
+                    Utils::isDir($_POST["csrf_token"])
+                    || Utils::isDir($email) 
+                    || Utils::isDir($password)
+                    || Utils::isDir($birthday)
+                    || Utils::isDir($nombre)
+                    || Utils::isDir($ocupacion)
+                    || Utils::isDir($pais)
+                ) {
+                    $errors = array_merge($errors, array("No se ha podido iniciar sesión"));
                 } else {
-                    $errors = array_merge($errors, array("Ha ocurrido un error, intenta nuevamente. Es posible que este correo ya haya sido registrado"));
+                    if (!Utils::emailChecker($email)) {
+                        $errors = array_merge($errors, array("Debe ingresar un correo válido"));
+                    } else if (!Utils::passwordChecker($password)) {
+                        $errors = array_merge($errors, array("La contraseña tener una longitud de más de 8 caracteres y contener al menos, 1 mayúscula, 1 minúscula, 1 número y 1 símbolo especial"));
+                    } else if ($birthday < (int)date("Y") - 100 || $birthday > (int)date("Y") + 100) {
+                        $errors = array_merge($errors, array("Debe ingresar un año de nacimiento válido"));
+                    } else {
+                        
+            
+                        // encrypt password
+                        $hash = password_hash($password, PASSWORD_BCRYPT);
+                        $user = new UserModel();
+                        $user->setNombre($nombre)
+                            ->setEmail($email)
+                            ->setPassword($hash)
+                            ->setBirthday($birthday)
+                            ->setIdPais($pais)
+                            ->setOcupacion($ocupacion);
+            
+                        if ($user->Save()) {
+                            header("Location: /user/login");
+                        } else {
+                            $errors = array_merge($errors, array("Ha ocurrido un error, intenta nuevamente. Es posible que este correo ya haya sido registrado"));
+                        }
+                    }
                 }
             }
         } else {
