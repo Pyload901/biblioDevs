@@ -36,9 +36,9 @@ class UserController {
             $password = strip_tags($_POST["password"]);
 
             if (
-                false
-                // Utils::isDir($email) 
-                // || Utils::isDir($password)
+                Utils::isDir($_POST["csrf_token"])
+                || Utils::isDir($email) 
+                || Utils::isDir($password)
             ) {
                 $errors = array_merge($errors, array("No se ha podido iniciar sesión"));
                 return;
@@ -96,8 +96,9 @@ class UserController {
             $pais = strip_tags($_POST["pais"]);
 
             if (
-                Utils::isDir($email) 
-                // || Utils::isDir($password)
+                Utils::isDir($_POST["csrf_token"])
+                || Utils::isDir($email) 
+                || Utils::isDir($password)
                 || Utils::isDir($birthday)
                 || Utils::isDir($nombre)
                 || Utils::isDir($ocupacion)
@@ -232,7 +233,11 @@ class UserController {
                     $currentPassword = strip_tags($_POST["current_password"]);
                     $newPassword = strip_tags($_POST["new_password"]);
                     $confirmPassword = strip_tags($_POST["confirm_password"]);
-                    
+                    if (
+                        Utils::isDir($currentPassword)
+                        || Utils::isDir($newPassword)
+                        || Utils::isDir($confirmPassword)
+                    )
                     // Verificar que la contraseña actual sea correcta
                     $db_user = $user->GetById($user_id);
                     if ($db_user && password_verify($currentPassword, $db_user->getPassword())) {
