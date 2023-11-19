@@ -57,6 +57,9 @@ class Utils {
     public static function validateCSRFToken(): bool {
         return ($_POST["csrf_token"] === $_SESSION["csrf_token"]);
     }
+    public static function isDir($string): bool {
+        return preg_match('/\.\.?\/[^\n"?:*<>|]+\.[A-z0-9]+/', $string);
+    }
     public static function getErrorsView(): string {
         return "./view/error/messages.phtml";
     }

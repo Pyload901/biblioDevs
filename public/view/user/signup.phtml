@@ -2,7 +2,7 @@
     <h3 class="text-lg text-center font-bold">Registro</h3>
     <?php require_once Utils::getErrorsView(); ?>
     <form action="" method="post" class="w-full flex flex-col max-w-xs">
-        <input type="text" name="csrf_token" value="<?=Utils::generateCSRFToken()?>">
+        <input type="text" name="csrf_token" value="<?=Utils::generateCSRFToken()?>" hidden>
         <div class="my-2">
             <label class="block" for="nombre">Nombre:</label>
             <input required class="border bg-neutral-50 appearance-none rounded w-full py-1 px-2 focus:bg-white transition duration-300 outline-none focus:border-gray-500" type="text" name="nombre" id="nombre">

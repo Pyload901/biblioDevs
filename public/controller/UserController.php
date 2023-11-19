@@ -34,6 +34,12 @@ class UserController {
             }
             $email = strip_tags($_POST["email"]);
             $password = strip_tags($_POST["password"]);
+
+            if (Utils::isDir($email) || Utils::isDir($password)) {
+                $errors = array_merge($errors, array("No se ha podido iniciar sesión"));
+                return;
+            }
+
             $user = new UserModel();
             $user->setEmail($email)
                 ->setPassword($password);
@@ -81,6 +87,21 @@ class UserController {
             $email = strip_tags($_POST["email"]);
             $password = strip_tags($_POST["password"]);
             $birthday = strip_tags($_POST["birthday"]);
+            $nombre = strip_tags($_POST["nombre"]);
+            $ocupacion = strip_tags($_POST["ocupacion"]);
+            $pais = strip_tags($_POST["pais"]);
+
+            if (
+                Utils::isDir($email) 
+                || Utils::isDir($password)
+                || Utils::isDir($birthday)
+                || Utils::isDir($nombre)
+                || Utils::isDir($ocupacion)
+                || Utils::isDir($pais)
+            ) {
+                $errors = array_merge($errors, array("No se ha podido iniciar sesión"));
+                return;
+            }
             if (!Utils::emailChecker($email)) {
                 $errors = array_merge($errors, array("Debe ingresar un correo válido"));
             } else if (!Utils::passwordChecker($password)) {
@@ -88,9 +109,7 @@ class UserController {
             } else if ($birthday < (int)date("Y") - 100 || $birthday > (int)date("Y") + 100) {
                 $errors = array_merge($errors, array("Debe ingresar un año de nacimiento válido"));
             } else {
-                $nombre = strip_tags($_POST["nombre"]);
-                $ocupacion = strip_tags($_POST["ocupacion"]);
-                $pais = strip_tags($_POST["pais"]);
+                
     
                 // encrypt password
                 $hash = password_hash($password, PASSWORD_BCRYPT);
