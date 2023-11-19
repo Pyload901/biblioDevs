@@ -1,6 +1,7 @@
 <div class="max-w-xs my-2">
     <h3 class="font-bold">Configuración del usuario</h3>
     <form action="" method="post">
+        <input type="text" name="csrf_token" value="<?= Utils::generateCSRFToken() ?>" hidden>
         <div class="my-2">
             <label for="role" class="block">Rol:</label>
             <select name="role" id="role" class="border bg-neutral-50 appearance-none rounded w-full py-1 px-2 focus:bg-white transition duration-300 outline-none focus:border-gray-500">

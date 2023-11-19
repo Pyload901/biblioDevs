@@ -2,6 +2,7 @@
     <h3 class="text-lg text-center font-bold">Editar Cuenta</h3>
     <?php require_once Utils::getErrorsView(); ?>
     <form action="/user/updateUser" method="post" class="w-full max-w-xs flex flex-col">
+        <input type="text" name="csrf_token" value="<?=Utils::generateCSRFToken()?>" hidden>
         <div class="my-2">
             <label for="nombre">Nombre:</label>
             <input type="text" name="nombre" id="nombre" value="<?= htmlspecialchars($db_user->getNombre()) ?>" class="border bg-neutral-50 appearance-none rounded w-full py-1 px-2 focus:bg-white transition duration-300 outline-none focus:border-gray-500">

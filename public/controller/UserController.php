@@ -35,7 +35,10 @@ class UserController {
             $email = strip_tags($_POST["email"]);
             $password = strip_tags($_POST["password"]);
 
-            if (Utils::isDir($email) || Utils::isDir($password)) {
+            if (
+                Utils::isDir($email) 
+                // || Utils::isDir($password)
+            ) {
                 $errors = array_merge($errors, array("No se ha podido iniciar sesión"));
                 return;
             }
@@ -93,7 +96,7 @@ class UserController {
 
             if (
                 Utils::isDir($email) 
-                || Utils::isDir($password)
+                // || Utils::isDir($password)
                 || Utils::isDir($birthday)
                 || Utils::isDir($nombre)
                 || Utils::isDir($ocupacion)
@@ -161,24 +164,42 @@ class UserController {
                 && !empty($_POST["nombre"])
                 
             ) {
-                if ($birthday < (int)date("Y") - 100 || $birthday > (int)date("Y") + 100) {
-                    $errors = array_merge($errors, array("Debe ingresar un año válido"));
-                } else {
-                    // Actualizar los campos con los nuevos valores del formulario
-                    $user->setNombre(strip_tags($_POST["nombre"]))
-                        ->setOcupacion(strip_tags($_POST["ocupacion"]))
-                        ->setBirthday(strip_tags($_POST["birthday"]))
-                        ->setIdPais(strip_tags($_POST["pais"]));
-        
-                 
-                    if ($user->Update()) {
-                        header("Location: /user"); 
-                    } else {
+                if (Utils::validateCSRFToken()) {
+                    $nombre = $_POST["nombre"];
+                    $ocupacion = $_POST["ocupacion"];
+                    $birthday = $_POST["birthday"];
+                    $pais = $_POST["pais"];
+                    
+                    if (
+                        Utils::isDir($nombre)
+                        || Utils::isDir($ocupacion)
+                        || Utils::isDir($birthday)
+                        || Utils::isDir($pais)
+                    ) {
                         $errors = array_merge($errors, array("Ha ocurrido un error al guardar los cambios."));
+                    } else {
+                        if ($birthday < (int)date("Y") - 100 || $birthday > (int)date("Y") + 100) {
+                            $errors = array_merge($errors, array("Debe ingresar un año válido"));
+                        } else {
+                            // Actualizar los campos con los nuevos valores del formulario
+                            $user->setNombre(strip_tags($_POST["nombre"]))
+                                ->setOcupacion(strip_tags($_POST["ocupacion"]))
+                                ->setBirthday(strip_tags($_POST["birthday"]))
+                                ->setIdPais(strip_tags($_POST["pais"]));
+                
+                         
+                            if ($user->Update()) {
+                                header("Location: /user"); 
+                            } else {
+                                $errors = array_merge($errors, array("Ha ocurrido un error al guardar los cambios."));
+                            }
+                        }
                     }
+                } else {
+                    $errors = array_merge($errors, array("No se completaron los campos necesarios"));
                 }
             } else {
-                $errors = array_merge($errors, array("No se completaron los campos"));
+                $errors = array_merge($errors, array("No se completaron los campos necesarios"));
             }
             $db_user = $user->GetById($user_id);
             $paisModel = new PaisModel();
@@ -205,26 +226,28 @@ class UserController {
                 && !empty($_POST["new_password"])
                 && !empty($_POST["confirm_password"])
             ) {
-                $currentPassword = strip_tags($_POST["current_password"]);
-                $newPassword = strip_tags($_POST["new_password"]);
-                $confirmPassword = strip_tags($_POST["confirm_password"]);
-                
-                // Verificar que la contraseña actual sea correcta
-                $db_user = $user->GetById($user_id);
-                if ($db_user && password_verify($currentPassword, $db_user->getPassword())) {
-                    if ($newPassword === $confirmPassword) {
-                        // Actualizar la contraseña
-                        if (Utils::passwordChecker($newPassword)) {
-                            $user->UpdatePassword($newPassword);
-                            header("Location: /user"); // Redirige al usuario a su perfil o a donde desees
+                if (Utils::validateCSRFToken()) {
+                    $currentPassword = strip_tags($_POST["current_password"]);
+                    $newPassword = strip_tags($_POST["new_password"]);
+                    $confirmPassword = strip_tags($_POST["confirm_password"]);
+                    
+                    // Verificar que la contraseña actual sea correcta
+                    $db_user = $user->GetById($user_id);
+                    if ($db_user && password_verify($currentPassword, $db_user->getPassword())) {
+                        if ($newPassword === $confirmPassword) {
+                            // Actualizar la contraseña
+                            if (Utils::passwordChecker($newPassword)) {
+                                $user->UpdatePassword($newPassword);
+                                header("Location: /user"); // Redirige al usuario a su perfil o a donde desees
+                            } else {
+                                $errors = array_merge($errors, array("La contraseña tener una longitud de más de 8 caracteres y contener al menos, 1 mayúscula, 1 minúscula, 1 número y 1 símbolo especial"));
+                            }
                         } else {
-                            $errors = array_merge($errors, array("La contraseña tener una longitud de más de 8 caracteres y contener al menos, 1 mayúscula, 1 minúscula, 1 número y 1 símbolo especial"));
+                            $errors = array_merge($errors, array("Las contraseñas no coinciden"));
                         }
                     } else {
-                        $errors = array_merge($errors, array("Las contraseñas no coinciden"));
+                        $errors = array_merge($errors, array("Contraseña actual incorrecta"));
                     }
-                } else {
-                    $errors = array_merge($errors, array("Contraseña actual incorrecta"));
                 }
             }
         } else {

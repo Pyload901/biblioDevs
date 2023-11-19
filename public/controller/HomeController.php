@@ -20,39 +20,57 @@ class HomeController {
             && !empty($_POST["titulo"])
             && !empty($_POST["autor"])
         ) {
-            $id_usuario = strip_tags($_SESSION["user_id"]);
-
-            $isbn = strip_tags($_POST["isbn"]);
-            $titulo = strip_tags($_POST["titulo"]);
-            $autor = strip_tags($_POST["autor"]);
-            $descripcion = (isset($_POST["descripcion"]) ? strip_tags($_POST["descripcion"]) : null);
-            $year = (isset($_POST["year"]) ? strip_tags($_POST["year"]) : null);
-            $edicion = (isset($_POST["edicion"]) ? strip_tags($_POST["edicion"]) : null);
-            $leido = (isset($_POST["leido"]) ? (bool)strip_tags($_POST["leido"]) : false);
-
-            if (!empty($year) && (!Utils::isInteger($year) || ($year < 1600 || $year > (int)date("Y")))) {
-                $errors = array_merge($errors, array("Debe ingresar un año válido"));
-                return;
-            }
-            if (!empty($edicion) && (!Utils::isInteger($edicion) || $edicion < 1)) {
-                $errors = array_merge($errors, array("Debe ingresar una edición válida"));
-                return;
-            }
-            $year = (int)$year;
-            $edicion = (int)$edicion;
-            $libro = new LibroModel();
-            $libro->setIsbn($isbn)
-                ->settitulo($titulo)
-                ->setAutor($autor)
-                ->setDescripcion($descripcion)
-                ->setYear($year)
-                ->setEdicion($edicion)
-                ->setLeido($leido);
-
-            if ($libro->Save($id_usuario)) {
-                header("Location: /");
+            if (!Utils::validateCSRFToken()) {
+                $errors = array_merge($errors, array("No se completaron los campos necesarios"));
             } else {
-                echo "Ha ocurrido un error";
+                $flag = true;
+                $id_usuario = strip_tags($_SESSION["user_id"]);
+    
+                $isbn = strip_tags($_POST["isbn"]);
+                $titulo = strip_tags($_POST["titulo"]);
+                $autor = strip_tags($_POST["autor"]);
+                $descripcion = (isset($_POST["descripcion"]) ? strip_tags($_POST["descripcion"]) : null);
+                $year = (isset($_POST["year"]) ? strip_tags($_POST["year"]) : null);
+                $edicion = (isset($_POST["edicion"]) ? strip_tags($_POST["edicion"]) : null);
+                $leido = (isset($_POST["leido"]) ? (bool)strip_tags($_POST["leido"]) : false);
+                if (
+                    Utils::isDir($isbn)
+                    || Utils::isDir($titulo)
+                    || Utils::isDir($autor)
+                    || Utils::isDir($descripcion)
+                    || Utils::isDir($year)
+                    || Utils::isDir($edicion)
+                    || Utils::isDir($leido)
+                ) {
+                    $errors = array_merge($errors, array("No se completaron los campos correctamente"));
+                    $flag = false;
+                }
+                if (!empty($year) && (!Utils::isInteger($year) || ($year < 1600 || $year > (int)date("Y")))) {
+                    $errors = array_merge($errors, array("Debe ingresar un año válido"));
+                    $flag = false;
+                }
+                if (!empty($edicion) && (!Utils::isInteger($edicion) || $edicion < 1)) {
+                    $errors = array_merge($errors, array("Debe ingresar una edición válida"));
+                    $flag = false;
+                }
+                if ($flag) {
+                    $year = (int)$year;
+                    $edicion = (int)$edicion;
+                    $libro = new LibroModel();
+                    $libro->setIsbn($isbn)
+                        ->settitulo($titulo)
+                        ->setAutor($autor)
+                        ->setDescripcion($descripcion)
+                        ->setYear($year)
+                        ->setEdicion($edicion)
+                        ->setLeido($leido);
+        
+                    if ($libro->Save($id_usuario)) {
+                        header("Location: /");
+                    } else {
+                        $errors = array_merge($errors, array("Ha ocurrido un error, intenta nuevamente"));
+                    }
+                }
             }
         } else {
             $errors = array_merge($errors, array("No se completaron los campos necesarios"));
@@ -87,6 +105,7 @@ class HomeController {
                 && !empty($_POST["autor"])
             ) {
                 $id_usuario = strip_tags($_SESSION["user_id"]);
+                $flag = true;
 
                 $isbn = strip_tags($_POST["isbn"]);
                 $titulo = strip_tags($_POST["titulo"]);
@@ -96,30 +115,43 @@ class HomeController {
                 $edicion = (isset($_POST["edicion"]) ? strip_tags($_POST["edicion"]) : null);
                 $leido = (isset($_POST["leido"]) ? (bool)strip_tags($_POST["leido"]) : false);
                 
+                if (
+                    Utils::isDir($isbn)
+                    || Utils::isDir($titulo)
+                    || Utils::isDir($autor)
+                    || Utils::isDir($descripcion)
+                    || Utils::isDir($year)
+                    || Utils::isDir($edicion)
+                    || Utils::isDir($leido)
+                ) {
+                    $errors = array_merge($errors, array("No se completaron los campos correctamente"));
+                    $flag = false;
+                }
                 if (!empty($year) && (!Utils::isInteger($year) || ($year < 1600 || $year > (int)date("Y")))) {
                     $errors = array_merge($errors, array("Debe ingresar un año válido"));
-                    return;
+                    $flag = false;
                 }
                 if (!empty($edicion) && (!Utils::isInteger($edicion) || $edicion < 1)) {
                     $errors = array_merge($errors, array("Debe ingresar una edición válida"));
-                    return;
+                    $flag = false;
                 }
-
-                $year = (int)$year;
-                $edicion = (int)$edicion;
-                $libro = new LibroModel();
-                $libro->setIsbn($isbn)
-                    ->settitulo($titulo)
-                    ->setAutor($autor)
-                    ->setDescripcion($descripcion)
-                    ->setYear($year)
-                    ->setEdicion($edicion)
-                    ->setLeido($leido)
-                    ->setId(strip_tags($_GET["id"]));
-                if ($libro->Update($id_usuario, Utils::isAdmin())) {
-                    header("Location: /home/libro&id={$libro->getId()}");
-                } else {
-                    $errors = array_merge($errors, array("Ha ocurrido un error, intentalo nuevamente"));
+                if ($flag) {
+                    $year = (int)$year;
+                    $edicion = (int)$edicion;
+                    $libro = new LibroModel();
+                    $libro->setIsbn($isbn)
+                        ->settitulo($titulo)
+                        ->setAutor($autor)
+                        ->setDescripcion($descripcion)
+                        ->setYear($year)
+                        ->setEdicion($edicion)
+                        ->setLeido($leido)
+                        ->setId(strip_tags($_GET["id"]));
+                    if ($libro->Update($id_usuario, Utils::isAdmin())) {
+                        header("Location: /home/libro&id={$libro->getId()}");
+                    } else {
+                        $errors = array_merge($errors, array("Ha ocurrido un error, intentalo nuevamente"));
+                    }
                 }
             } else {
                 $id_usuario = $_SESSION["user_id"];
