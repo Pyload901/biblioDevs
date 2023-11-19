@@ -26,7 +26,7 @@ class UserController {
         if (
             !empty($_POST["email"]) 
             && !empty($_POST["password"])
-            && !empty($_POST["token"])
+            && !empty($_POST["csrf_token"])
         ) {
             if (!Utils::validateCSRFToken()) {
                 $errors = array_merge($errors, array("No se ha podido iniciar sesión"));
@@ -36,7 +36,8 @@ class UserController {
             $password = strip_tags($_POST["password"]);
 
             if (
-                Utils::isDir($email) 
+                false
+                // Utils::isDir($email) 
                 // || Utils::isDir($password)
             ) {
                 $errors = array_merge($errors, array("No se ha podido iniciar sesión"));
@@ -81,7 +82,7 @@ class UserController {
             && !empty($_POST["ocupacion"])
             && !empty($_POST["birthday"])
             && !empty($_POST["pais"])
-            && !empty($_POST["token"])
+            && !empty($_POST["csrf_token"])
         ) {
             if (!Utils::validateCSRFToken()) {
                 $errors = array_merge($errors, array("No se ha podido iniciar sesión"));
@@ -162,7 +163,7 @@ class UserController {
                 && !empty($_POST["birthday"])
                 && !empty($_POST["pais"])
                 && !empty($_POST["nombre"])
-                
+                && !empty($_POST["csrf_token"])
             ) {
                 if (Utils::validateCSRFToken()) {
                     $nombre = $_POST["nombre"];
@@ -225,6 +226,7 @@ class UserController {
                 && !empty($_POST["current_password"])
                 && !empty($_POST["new_password"])
                 && !empty($_POST["confirm_password"])
+                && !empty($_POST["csrf_token"])
             ) {
                 if (Utils::validateCSRFToken()) {
                     $currentPassword = strip_tags($_POST["current_password"]);

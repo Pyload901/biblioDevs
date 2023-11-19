@@ -38,7 +38,12 @@ class AdminController{
             $libro = new LibroModel();
             $libros = $libro->GetAll($id_usuario);
             if (Utils::isSuper() && $id_usuario != $_SESSION["user_id"]) {
-                if (isset($_POST) && !empty($_POST["role"]) && Utils::validateCSRFToken()) {
+                
+                if (isset($_POST)
+                    && !empty($_POST["role"]
+                    && !empty($_POST["csrf_token"]))
+                    && Utils::validateCSRFToken()
+                ) {
                     $role = strip_tags($_POST["role"]);
                     if (!Utils::isDir($role)) {
                         if ($role != Role::SUPER->value) {

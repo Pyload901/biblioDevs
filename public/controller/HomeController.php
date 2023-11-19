@@ -19,7 +19,8 @@ class HomeController {
             !empty($_POST["isbn"])
             && !empty($_POST["titulo"])
             && !empty($_POST["autor"])
-        ) {
+            && !empty($_POST["csrf_token"])
+            ) {
             if (!Utils::validateCSRFToken()) {
                 $errors = array_merge($errors, array("No se completaron los campos necesarios"));
             } else {
@@ -103,6 +104,7 @@ class HomeController {
                 !empty($_POST["isbn"])
                 && !empty($_POST["titulo"])
                 && !empty($_POST["autor"])
+                && !empty($_POST["csrf_token"])
             ) {
                 $id_usuario = strip_tags($_SESSION["user_id"]);
                 $flag = true;
