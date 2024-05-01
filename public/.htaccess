@@ -2,12 +2,20 @@
     RewriteEngine On
     ErrorDocument 404 https://%{HTTP_HOST}/error
     #ErrorDocument 403 https://%{HTTP_HOST}/error/forbidden
-    RewriteCond %{SCRIPT_FILENAME} !-d
-    RewriteCond %{SCRIPT_FILENAME} !-f
+    
+    RewriteCond %{REQUEST_FILENAME} !-f
+    RewriteCond %{REQUEST_FILENAME} !-d
+    #RewriteCond %{SCRIPT_FILENAME} !-d
+    #RewriteCond %{SCRIPT_FILENAME} !-f
     RewriteRule ^(.*)/(.*)$ index.php?controller=$1&method=$2 
-    RewriteCond %{SCRIPT_FILENAME} !-d
-    RewriteCond %{SCRIPT_FILENAME} !-f
+
+    RewriteCond %{REQUEST_FILENAME} !-f
+    RewriteCond %{REQUEST_FILENAME} !-d
+    #RewriteCond %{SCRIPT_FILENAME} !-d
+    #RewriteCond %{SCRIPT_FILENAME} !-f
     RewriteRule ^(.*)$ index.php?controller=$1&method=index
 
+    RewriteCond %{REQUEST_FILENAME} !-f
+    RewriteCond %{REQUEST_FILENAME} !-d
     RewriteRule ^$ index.php?controller=home&method=index
 </IfModule>
