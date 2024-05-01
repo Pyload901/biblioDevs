@@ -1,6 +1,7 @@
 <?php
 class Database {
-    public static function Connect() : PDO | null {
+    private static $conn = null;
+    private static function CreateConnection() : PDO | null {
         try {
             $DB_HOST = $_ENV["DB_HOST"];
             $DB_DATABASE = $_ENV["DB_DATABASE"];
@@ -16,5 +17,18 @@ class Database {
             echo $e->getMessage();
             return null;
         }
+    }
+
+    public static function Connect() : PDO | null {
+        if (is_null(self::$conn)) {
+            self::$conn = self::CreateConnection();
+        } else {
+            try {
+                self::$conn->query("SELECT 1");
+            } catch(PDOException $e) {
+                self::$conn = self::CreateConnection();
+            }
+        }
+        return self::$conn;
     }
 }
