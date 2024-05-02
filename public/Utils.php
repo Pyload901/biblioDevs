@@ -52,6 +52,9 @@ class Utils {
     public static function isInteger($exp): bool {
         return (!preg_match("/[^0-9]/",$exp));
     }
+    public static function isbnChecker($isbn): bool {
+        return (preg_match("@^(?=(?:\D*\d){10}(?:(?:\D*\d){3})?$)[\d-]+$@",$isbn));
+    }
     public static function generateCSRFToken(): string {
         $token = md5(uniqid(mt_rand(), true));
         $_SESSION["csrf_token"] = $token;

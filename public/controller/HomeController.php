@@ -46,6 +46,10 @@ class HomeController {
                     $errors = array_merge($errors, array("No se completaron los campos correctamente"));
                     $flag = false;
                 }
+                if (!Utils::isbnChecker($isbn)) {
+                    $errors = array_merge($errors, array("Debe ingresar un ISBN válido"));
+                    $flag = false;
+                }
                 if (!empty($year) && (!Utils::isInteger($year) || ($year < 1600 || $year > (int)date("Y")))) {
                     $errors = array_merge($errors, array("Debe ingresar un año válido"));
                     $flag = false;
@@ -160,7 +164,7 @@ class HomeController {
                 $libro = new LibroModel();
                 $libro->setId(strip_tags($_GET["id"]));
                 $libro = $libro->Get($id_usuario, Utils::isAdmin());
-                require_once "./view/home/agregar.phtml";
+                require_once "./view/home/editar.phtml";
             }
         } else {
             header("Location: /");

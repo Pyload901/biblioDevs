@@ -1,3 +1,12 @@
+<?php
+    $isbn = isset($libro) ? $libro->getIsbn() : "";
+    $titulo = isset($libro) ? $libro->getTitulo() : "";
+    $autor = isset($libro) ? $libro->getAutor() : "";
+    $descripcion = isset($libro) && !is_null($libro->getDescripcion()) ? $libro->getDescripcion() : "";
+    $year = isset($libro) && $libro->getYear() ? $libro->getYear() : "";
+    $edicion = isset($libro) && $libro->getEdicion() ? $libro->getEdicion() : "";
+    $leido = isset($libro) && $libro->getLeido() ? "checked" : "";
+?>
 <div class="w-full flex flex-col items-center">
     <h3 class="text-lg text-center font-bold">Agregar un libro</h3>
     <?php require_once Utils::getErrorsView(); ?>
@@ -34,6 +43,6 @@
             <input class="border-gray-100 w-4 h-4 bg-neutral-50 rounded text-red-500 focus:border-gray-500" type="checkbox" name="leido" id="leido" <?=$leido?>>
             <label class="ml-2" for="leido" class="block">Leído</label>
         </div>
-        <input class="self-end border rounded bg-red outline-none py-1 px-2 my-2 bg-red-600 text-white hover:bg-red-700 cursor-pointer" type="submit" value="Agregar">
+        <input class="self-end border rounded bg-red outline-none py-1 px-2 my-2 bg-red-600 text-white hover:bg-red-700 cursor-pointer" type="submit" value="Editar">
     </form>
 </div>

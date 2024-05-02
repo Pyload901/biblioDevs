@@ -25,7 +25,9 @@ class UserModel {
             $stmt->execute();
             return true;
         } catch (PDOException $e) {
-            echo $e->getMessage();
+            if (Utils::isDevMode()) {
+                echo "". $e->getMessage() ."";
+            }
             return false;
         }
     }
@@ -73,7 +75,9 @@ class UserModel {
             $stmt->execute();
             return true;
         } catch (PDOException $e) {
-            echo $e->getMessage();
+            if (Utils::isDevMode()) {
+                echo "". $e->getMessage() ."";
+            }
             return false;
         }
     }
@@ -90,7 +94,9 @@ class UserModel {
             $stmt->execute();
             return true;
         } catch (PDOException $e) {
-            echo $e->getMessage();
+            if (Utils::isDevMode()) {
+                echo "". $e->getMessage() ."";
+            }
             return false;
         }
     }
