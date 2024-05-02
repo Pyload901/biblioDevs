@@ -46,6 +46,9 @@ class Utils {
         }
         return $res;
     }
+    public static function confirmPassword($password, $confirmPassword): bool {
+        return $password === $confirmPassword;
+    }
     public static function isInteger($exp): bool {
         return (!preg_match("/[^0-9]/",$exp));
     }

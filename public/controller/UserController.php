@@ -79,6 +79,7 @@ class UserController {
             && !empty($_POST["nombre"])
             && !empty($_POST["email"])
             && !empty($_POST["password"])
+            && !empty($_POST["confirm_password"])
             && !empty($_POST["ocupacion"])
             && !empty($_POST["birthday"])
             && !empty($_POST["pais"])
@@ -90,6 +91,8 @@ class UserController {
 
                 $email = strip_tags($_POST["email"]);
                 $password = strip_tags($_POST["password"]);
+                $confirmPassword = strip_tags($_POST["confirm_password"]);
+                
                 $birthday = strip_tags($_POST["birthday"]);
                 $nombre = strip_tags($_POST["nombre"]);
                 $ocupacion = strip_tags($_POST["ocupacion"]);
@@ -110,6 +113,8 @@ class UserController {
                         $errors = array_merge($errors, array("Debe ingresar un correo válido"));
                     } else if (!Utils::passwordChecker($password)) {
                         $errors = array_merge($errors, array("La contraseña tener una longitud de más de 8 caracteres y contener al menos, 1 mayúscula, 1 minúscula, 1 número y 1 símbolo especial"));
+                    } else if (!Utils::confirmPassword($password, $confirmPassword)) {
+                        $errors = array_merge($errors, array("Las contraseñas no coinciden"));
                     } else if ($birthday < (int)date("Y") - 100 || $birthday > (int)date("Y") + 100) {
                         $errors = array_merge($errors, array("Debe ingresar un año de nacimiento válido"));
                     } else {
