@@ -17,6 +17,10 @@ class LibroModel {
 
     public function Save(int $id_usuario): bool {
         try {
+            $libro = self::GetByISBN( $id_usuario, $this->isbn );
+            if ( $libro === null ) {
+                return false;
+            }
             $stmt = $this->DB->prepare("INSERT INTO Libro(isbn, titulo, autor, descripcion, year, edicion, leido, id_usuario) VALUES(?,?,?,?,?,?,?,?)");
             $stmt->bindParam(1, $this->isbn, PDO::PARAM_STR);
             $stmt->bindParam(2, $this->titulo, PDO::PARAM_STR);
@@ -107,11 +111,29 @@ class LibroModel {
             $stmt->execute();
             $stmt->setFetchMode(PDO::FETCH_CLASS, LibroModel::class);
             $res = $stmt->fetch();
-            if ($res) {
-                if ($res)
-                    return $res;
-                return null;
+            if ($res)
+                return $res;
+            return null;
+        } catch (PDOException $e) {
+            if (Utils::isDevMode()) {
+                echo "". $e->getMessage() ."";
             }
+            return null;
+        }
+    }
+    public function GetByISBN(int $id_usuario, string $isbn): LibroModel | null {
+        try {
+            $query = "SELECT id FROM Libro WHERE isbn = ? AND id_usuario = ?";
+            
+            $stmt = $this->DB->prepare($query);
+            $stmt->bindParam(1, $isbn, PDO::PARAM_STR);
+            $stmt->bindParam(2, $id_usuario, PDO::PARAM_INT);
+
+            $stmt->execute();
+            $stmt->setFetchMode(PDO::FETCH_CLASS, LibroModel::class);
+            $res = $stmt->fetch();
+            if ($res)
+                return $res;
             return null;
         } catch (PDOException $e) {
             if (Utils::isDevMode()) {
