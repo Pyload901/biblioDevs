@@ -17,10 +17,6 @@ class LibroModel {
 
     public function Save(int $id_usuario): bool {
         try {
-            $libro = self::GetByISBN( $id_usuario, $this->isbn );
-            if ( $libro === null ) {
-                return false;
-            }
             $stmt = $this->DB->prepare("INSERT INTO Libro(isbn, titulo, autor, descripcion, year, edicion, leido, id_usuario) VALUES(?,?,?,?,?,?,?,?)");
             $stmt->bindParam(1, $this->isbn, PDO::PARAM_STR);
             $stmt->bindParam(2, $this->titulo, PDO::PARAM_STR);

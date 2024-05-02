@@ -100,8 +100,7 @@ class UserController {
     
                 if (
                     Utils::isDir($_POST["csrf_token"])
-                    || Utils::isDir($email) 
-                    || Utils::isDir($password)
+                    || Utils::isDir($email)
                     || Utils::isDir($birthday)
                     || Utils::isDir($nombre)
                     || Utils::isDir($ocupacion)
@@ -239,28 +238,25 @@ class UserController {
                     $currentPassword = strip_tags($_POST["current_password"]);
                     $newPassword = strip_tags($_POST["new_password"]);
                     $confirmPassword = strip_tags($_POST["confirm_password"]);
-                    if (
-                        Utils::isDir($currentPassword)
-                        || Utils::isDir($newPassword)
-                        || Utils::isDir($confirmPassword)
-                    ) {
-                        // Verificar que la contraseña actual sea correcta
-                        $db_user = $user->GetById($user_id);
-                        if ($db_user !== null && password_verify($currentPassword, $db_user->getPassword())) {
-                            if ($newPassword === $confirmPassword) {
-                                // Actualizar la contraseña
-                                if (Utils::passwordChecker($newPassword)) {
-                                    $user->UpdatePassword($newPassword);
-                                    header("Location: /user"); // Redirige al usuario a su perfil o a donde desees
-                                } else {
-                                    $errors = array_merge($errors, array("La contraseña tener una longitud de más de 8 caracteres y contener al menos, 1 mayúscula, 1 minúscula, 1 número y 1 símbolo especial"));
-                                }
+                    
+                    // Verificar que la contraseña actual sea correcta
+                    $db_user = $user->GetById($user_id);
+                    if ($db_user !== null && password_verify($currentPassword, $db_user->getPassword())) {
+                        if ($newPassword === $confirmPassword) {
+                            // Actualizar la contraseña
+                            if (Utils::passwordChecker($newPassword)) {
+                                $hashedPassword = password_hash($newPassword, PASSWORD_BCRYPT);
+
+                                $user->UpdatePassword($hashedPassword);
+                                header("Location: /user"); // Redirige al usuario a su perfil o a donde desees
                             } else {
-                                $errors = array_merge($errors, array("Las contraseñas no coinciden"));
+                                $errors = array_merge($errors, array("La contraseña tener una longitud de más de 8 caracteres y contener al menos, 1 mayúscula, 1 minúscula, 1 número y 1 símbolo especial"));
                             }
                         } else {
-                            $errors = array_merge($errors, array("Contraseña actual incorrecta"));
+                            $errors = array_merge($errors, array("Las contraseñas no coinciden"));
                         }
+                    } else {
+                        $errors = array_merge($errors, array("Contraseña actual incorrecta"));
                     }
                 }
             }

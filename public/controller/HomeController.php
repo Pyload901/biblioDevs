@@ -46,6 +46,15 @@ class HomeController {
                     $errors = array_merge($errors, array("No se completaron los campos correctamente"));
                     $flag = false;
                 }
+
+                $libro = new LibroModel();
+                $libro = $libro->GetByISBN($id_usuario, $isbn);
+                if ( $libro !== null ) {
+                    $errors = array_merge($errors, array("Ya existe un libro con este ISBN en tu estantería"));
+                    $flag = false;
+                }
+                unset($libro);
+
                 if (!Utils::isbnChecker($isbn)) {
                     $errors = array_merge($errors, array("Debe ingresar un ISBN válido"));
                     $flag = false;
@@ -58,6 +67,8 @@ class HomeController {
                     $errors = array_merge($errors, array("Debe ingresar una edición válida"));
                     $flag = false;
                 }
+
+
                 if ($flag) {
                     $year = (int)$year;
                     $edicion = (int)$edicion;

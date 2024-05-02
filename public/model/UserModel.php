@@ -83,12 +83,9 @@ class UserModel {
     }
     
     public function UpdatePassword(string $newPassword): bool {
-        try {
-            // Hashea la nueva contraseña antes de actualizarla en la base de datos
-            $hashedPassword = password_hash($newPassword, PASSWORD_BCRYPT);
-    
+        try {    
             $stmt = $this->DB->prepare("UPDATE Usuario SET password = ? WHERE id = ?");
-            $stmt->bindParam(1, $hashedPassword, PDO::PARAM_STR);
+            $stmt->bindParam(1, $newPassword, PDO::PARAM_STR);
             $stmt->bindParam(2, $this->id, PDO::PARAM_INT);
     
             $stmt->execute();
