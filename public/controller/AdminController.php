@@ -40,8 +40,8 @@ class AdminController{
             if (Utils::isSuper() && $id_usuario != $_SESSION["user_id"]) {
                 
                 if (isset($_POST)
-                    && !empty($_POST["role"]
-                    && !empty($_POST["csrf_token"]))
+                    && !empty($_POST["role"])
+                    && !empty($_POST["csrf_token"])
                     && Utils::validateCSRFToken()
                 ) {
                     $role = strip_tags($_POST["role"]);
@@ -49,9 +49,9 @@ class AdminController{
                         if ($role != Role::SUPER->value) {
                             $usuario->setRole($role);
                             if ($usuario->ChangeRole()) {
-    
+                                echo "<script>alert('Cambio realizado con éxito');</script>";
                             } else {
-                                
+                                echo "<script>alert('Hubo un error al realizar esta');</script>";
                             }
                         }
                     }
