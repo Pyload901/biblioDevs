@@ -8,7 +8,7 @@ class PaisModel {
     }
     public function GetAll(): array | null {
         try {
-            $stmt = $this->DB->prepare("SELECT * FROM Pais");
+            $stmt = $this->DB->prepare("SELECT * FROM Pais ORDER BY nombre ASC");
             $stmt->execute();
             $stmt->setFetchMode(PDO::FETCH_CLASS, PaisModel::class);
             $rows = $stmt->fetchAll();
