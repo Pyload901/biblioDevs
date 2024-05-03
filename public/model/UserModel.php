@@ -1,7 +1,6 @@
 <?php
 class UserModel {
-    // insecure id
-    private string $id;
+    private int $id;
     private string $nombre;
     private string $email;
     private string $password;
@@ -50,13 +49,11 @@ class UserModel {
             return null;
         }
     }
-    // insecure id
-    public function GetById(string $id): UserModel | null {
+    public function GetById(int $id): UserModel | null {
         try {
-            // $stmt = $this->DB->prepare("SELECT id, nombre, email, password, birthday, id_pais, ocupacion, role FROM Usuario WHERE id = ?");
-            // $stmt->bindParam(1, $id, PDO::PARAM_INT);
-            // $stmt->execute();
-            $stmt = $this->DB->query("SELECT id, nombre, email, password, birthday, id_pais, ocupacion, role FROM Usuario WHERE id = $id");
+            $stmt = $this->DB->prepare("SELECT id, nombre, email, password, birthday, id_pais, ocupacion, role FROM Usuario WHERE id = ?");
+            $stmt->bindParam(1, $id, PDO::PARAM_INT);
+            $stmt->execute();
             $stmt->setFetchMode(PDO::FETCH_CLASS, UserModel::class);
             $user = $stmt->fetch();
             if ($user)
@@ -169,9 +166,9 @@ class UserModel {
     /**
      * Get the value of id
      *
-     * @return string
+     * @return int
      */
-    public function getId(): string
+    public function getId(): int
     {
         return $this->id;
     }
@@ -179,11 +176,11 @@ class UserModel {
     /**
      * Set the value of id
      *
-     * @param string $id
+     * @param int $id
      *
      * @return self
      */
-    public function setId(string $id): self
+    public function setId(int $id): self
     {
         $this->id = $id;
 
