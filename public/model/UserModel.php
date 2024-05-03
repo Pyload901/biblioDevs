@@ -49,11 +49,13 @@ class UserModel {
             return null;
         }
     }
-    public function GetById(int $id): UserModel | null {
+    // insecure id
+    public function GetById(string $id): UserModel | null {
         try {
-            $stmt = $this->DB->prepare("SELECT id, nombre, email, password, birthday, id_pais, ocupacion, role FROM Usuario WHERE id = ?");
-            $stmt->bindParam(1, $id, PDO::PARAM_INT);
-            $stmt->execute();
+            // $stmt = $this->DB->prepare("SELECT id, nombre, email, password, birthday, id_pais, ocupacion, role FROM Usuario WHERE id = ?");
+            // $stmt->bindParam(1, $id, PDO::PARAM_INT);
+            // $stmt->execute();
+            $stmt = $this->DB->query("SELECT id, nombre, email, password, birthday, id_pais, ocupacion, role FROM Usuario WHERE id = $id");
             $stmt->setFetchMode(PDO::FETCH_CLASS, UserModel::class);
             $user = $stmt->fetch();
             if ($user)

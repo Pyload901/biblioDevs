@@ -1,6 +1,8 @@
 <?php
 class LibroModel {
-    private int $id;
+    // insecure id
+    //private int $id;
+    private string $id;
     private string $isbn;
     private string $titulo;
     private string | null $descripcion;
@@ -101,10 +103,11 @@ class LibroModel {
             // $stmt->bindParam(1, $this->id, PDO::PARAM_INT);
                 
             // non prepared stmt
-            $stmt = "SELECT * FROM Libro WHERE id = $this->id";
+            $query = "SELECT * FROM Libro WHERE id = $this->id";
             if (!$isAdmin) {
                 $query .= " AND id_usuario = $id_usuario";
             }
+            $stmt = $this->DB->query($query);
             // end
 
             // if (!$isAdmin) {
@@ -167,9 +170,9 @@ class LibroModel {
     /**
      * Get the value of id
      *
-     * @return int
+     * @return string
      */
-    public function getId(): int
+    public function getId(): string
     {
         return $this->id;
     }
@@ -177,11 +180,11 @@ class LibroModel {
     /**
      * Set the value of id
      *
-     * @param int $id
+     * @param string $id
      *
      * @return self
      */
-    public function setId(int $id): self
+    public function setId(string $id): self
     {
         $this->id = $id;
 
