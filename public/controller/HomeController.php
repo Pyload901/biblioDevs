@@ -30,7 +30,10 @@ class HomeController {
                 $isbn = strip_tags($_POST["isbn"]);
                 $titulo = strip_tags($_POST["titulo"]);
                 $autor = strip_tags($_POST["autor"]);
-                $descripcion = (isset($_POST["descripcion"]) ? strip_tags($_POST["descripcion"]) : null);
+
+                // deleted stip tags of description
+                $descripcion = (isset($_POST["descripcion"]) ? ($_POST["descripcion"]) : null);
+                
                 $year = (isset($_POST["year"]) ? strip_tags($_POST["year"]) : null);
                 $edicion = (isset($_POST["edicion"]) ? strip_tags($_POST["edicion"]) : null);
                 $leido = (isset($_POST["leido"]) ? (bool)strip_tags($_POST["leido"]) : false);

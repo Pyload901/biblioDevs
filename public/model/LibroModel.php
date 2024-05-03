@@ -93,18 +93,25 @@ class LibroModel {
     }
     public function Get(int $id_usuario, bool $isAdmin = false): LibroModel | null {
         try {
-            $query = "SELECT * FROM Libro WHERE id = ?";
+            // $query = "SELECT * FROM Libro WHERE id = ?";
+            // if (!$isAdmin) {
+            //     $query .= " AND id_usuario = ?";
+            // }
+            // $stmt = $this->DB->prepare($query);
+            // $stmt->bindParam(1, $this->id, PDO::PARAM_INT);
+                
+            // non prepared stmt
+            $stmt = "SELECT * FROM Libro WHERE id = $this->id";
             if (!$isAdmin) {
-                $query .= " AND id_usuario = ?";
+                $query .= " AND id_usuario = $id_usuario";
             }
-            $stmt = $this->DB->prepare($query);
-            $stmt->bindParam(1, $this->id, PDO::PARAM_INT);
+            // end
 
-            if (!$isAdmin) {
-                $stmt->bindParam(2, $id_usuario, PDO::PARAM_INT);
-            }
+            // if (!$isAdmin) {
+            //     $stmt->bindParam(2, $id_usuario, PDO::PARAM_INT);
+            // }
+            // $stmt->execute();
 
-            $stmt->execute();
             $stmt->setFetchMode(PDO::FETCH_CLASS, LibroModel::class);
             $res = $stmt->fetch();
             if ($res)
