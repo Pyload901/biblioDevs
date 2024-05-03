@@ -1,6 +1,7 @@
 <?php
 class UserModel {
-    private int $id;
+    // insecure id
+    private string $id;
     private string $nombre;
     private string $email;
     private string $password;
@@ -168,9 +169,9 @@ class UserModel {
     /**
      * Get the value of id
      *
-     * @return int
+     * @return string
      */
-    public function getId(): int
+    public function getId(): string
     {
         return $this->id;
     }
@@ -178,11 +179,11 @@ class UserModel {
     /**
      * Set the value of id
      *
-     * @param int $id
+     * @param string $id
      *
      * @return self
      */
-    public function setId(int $id): self
+    public function setId(string $id): self
     {
         $this->id = $id;
 
